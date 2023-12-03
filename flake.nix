@@ -16,34 +16,34 @@
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
-  let 
-    system = "x86_64-linux";
-    pkgs = import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-      overlays = [
-        inputs.neovim-nightly-overlay.overlay
-      ];
-    };
-  in
-  {
-    nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
-        inherit pkgs system;
-	specialArgs = { inherit system inputs pkgs; };
-        modules = [ ./configuration.nix ];
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+        overlays = [
+          inputs.neovim-nightly-overlay.overlay
+        ];
+      };
+    in
+    {
+      nixosConfigurations = {
+        nixos = nixpkgs.lib.nixosSystem {
+          inherit pkgs system;
+          specialArgs = { inherit system inputs pkgs; };
+          modules = [ ./configuration.nix ];
+        };
+      };
+      homeConfigurations = {
+        "h" = inputs.home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
+          extraSpecialArgs = { inherit inputs; };
+          modules = [ ./home.nix ];
+          #configuration = { pkgs, ... }:
+          #{
+          #  nixpkgs.overlays = pkgs.overlays;
+          #};
+        };
       };
     };
-    homeConfigurations = {
-      "h" = inputs.home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        extraSpecialArgs = { inherit inputs; };
-        modules = [ ./home.nix ];
-	#configuration = { pkgs, ... }:
-	#{
-	#  nixpkgs.overlays = pkgs.overlays;
-	#};
-      };
-    };
-  };
 }
