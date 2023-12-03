@@ -110,6 +110,8 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     ly
+    python311Packages.pywlroots
+    python311Packages.pywayland
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
