@@ -6,7 +6,8 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
 
@@ -17,7 +18,7 @@
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "Europe/London";
@@ -29,52 +30,59 @@
   # Select internationalisation properties.
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
-  #   font = "Lat2-Terminus16";
+    #   font = "Lat2-Terminus16";
     keyMap = "us";
-  #   useXkbConfig = true; # use xkbOptions in tty.
+    #   useXkbConfig = true; # use xkbOptions in tty.
   };
 
-  # nixpkgs.overlays = [
-  #   (self: super: {
-  #     qtile-unwrapped = super.qtile-unwrapped.overrideAttrs(_: rec {
-  #       postInstall = let
-  #         qtileSession = ''
-  #         [Desktop Entry]
-  #         Name=Qtile Wayland
-  #         Comment=Qtile on Wayland
-  #         Exec=qtile start -b wayland
-  #         Type=Application
-  #         '';
-  #         in
-  #         ''
-  #       mkdir -p $out/share/wayland-sessions
-  #       echo "${qtileSession}" &gt; $out/share/wayland-sessions/qtile.desktop
-  #       '';
-  #       passthru.providedSessions = [ "qtile" ];
-  #     });
-  #   })
-  # ];
+/*
+  nixpkgs.overlays = [
+    (self: super: {
+      qtile-unwrapped = super.python311Packages.qtile-unwrapped.overrideAttrs (_: rec {
+        postInstall =
+          let
+            qtileSession = ''
+              [Desktop Entry]
+              Name=Qtile Wayland
+              Comment=Qtile on Wayland
+              Exec=qtile start -b wayland
+              Type=Application
+            '';
+          in
+          ''
+            mkdir -p $out/share/wayland-sessions
+            echo "${qtileSession}" &gt; $out/share/wayland-sessions/qtile.desktop
+          '';
+        passthru.providedSessions = [ "qtile" ];
+      });
+    })
+  ];
+  */
+  security.polkit.enable = true;
 
   # Enable the X11 windowing system.
+  /*
   services.xserver = {
     enable = true;
-    windowManager.qtile.enable = true;
-    windowManager.qtile.backend = "wayland";
     layout = "gb";
     xkbOptions = "eurosign:e,caps:escape";
     libinput.enable = true;
-    displayManager.lightdm.enable = true;
-    displayManager.lightdm.greeters.mini = {
+    displayManager.sddm.enable = true;
+    windowManager.qtile.enable = true;
+    windowManager.qtile.backend = "wayland";
+    # displayManager.sessionPackages = [ pkgs.qtile-unwrapped ];
+      displayManager.lightdm.greeters.mini = {
       enable = true;
       user = "h";
       extraConfig = ''
-        [greeter]
-        show-password-label = false
-        [greeter-theme]
-        background-image = ""
+      [greeter]
+      show-password-label = false
+      [greeter-theme]
+      background-image = ""
       '';
-    };
+      };
   };
+  */
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -110,8 +118,10 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     ly
-    python311Packages.pywlroots
-    python311Packages.pywayland
+    qtile
+    sway
+    # python311Packages.pywlroots
+    # python311Packages.pywayland
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
