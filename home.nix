@@ -63,6 +63,7 @@ in
     gcc
     gnumake
     nodejs
+    python3
     unzip
     zip
 
