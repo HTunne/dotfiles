@@ -29,6 +29,18 @@ let
     crust = "#11111b";
   };
   myfont = "DejaVuSansM Nerd Font Mono";
+
+  /* 
+    pkgs.overlays = pkgs.overlays ++ [
+    (final: prev: {
+    hello = prev.hello.overrideAttrs (old: {
+    postInstall = (old.postInstall or "") + ''
+    install ext/on-modify.timewarrior "${config.home.homeDirectory}/.config/task/hooks/";
+    '';
+    });
+    })
+    ];
+  */
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
@@ -52,9 +64,13 @@ in
     (nerdfonts.override { fonts = [ "DejaVuSansMono" ]; })
     bemenu
     libnotify
-    light
     swaybg
+    imagemagick
+    slurp
+    grim
+    swappy
     wl-clipboard
+    udisks
 
     # Devtools
     bear
@@ -72,16 +88,101 @@ in
     R
     ripgrep
     sxiv
+    pqiv
     wget
+    timewarrior
+    xorg.xlsclients
+
+    # NVIM
+    # bash
+    nodePackages.bash-language-server
+    shfmt
+    # cmake
+    cmake-language-server
+    cmake-format
+    # js/ts
+    nodePackages.typescript-language-server
+    tailwindcss-language-server
+    prettierd
+    # lua
+    lua-language-server
+    selene
+    stylua
+    # nix
+    rnix-lsp
+    # openscad
+    openscad-lsp
+    # python
+    python311Packages.python-lsp-server
+    python311Packages.flake8
+    yapf
+    isort
+    python311Packages.vulture
+    # vue
+    nodePackages.vue-language-server
+
+    tree-sitter
 
     # GUI
-    ardour
+    backintime
     blueman
     gimp
+    guvcview
+    inkscape
     kicad
+    libreoffice
     openscad
     pcmanfm
-    timeshift
+    pinta
+    libsForQt5.qtstyleplugin-kvantum
+
+    #audio
+    qpwgraph
+    ardour
+    audacity
+    AMB-plugins
+    avldrums-lv2
+    bespokesynth
+    calf
+    cardinal
+    caps
+    bchoppr
+    dexed
+    distrho
+    dragonfly-reverb
+    helm
+    hydrogen
+    tap-plugins
+    vmpk
+    wolf-shaper
+    yoshimi
+    zam-plugins
+
+
+    (writeShellApplication {
+      name = "grimwrap";
+      runtimeInputs = [ grim slurp wl-clipboard swappy imagemagick ];
+      text = ''
+        inopt=$(echo -e "Fullscreen\nSelect" | bemenu "$@" -p 'Screenshot input')
+        outopt=$(echo -e "Save\nCopy\nEdit" | bemenu "$@" -p 'Screenshot output')
+        case $inopt in
+          Fullscreen)
+            case $outopt in
+              Save) grim "$HOME"/pics/scrns/"$(date -u +%Y-%m-%d-%H-%M-%S-%N)".png;;
+              Copy) grim - | convert - -shave 1x1 PNG:- | wl-copy;;
+              Edit) grim - | swappy -f -;;
+            esac
+           ;;
+          Select)
+            case $outopt in
+              Save) slurp | grim -g - "$HOME"/pics/scrns/"$(date -u +%Y-%m-%d-%H-%M-%S-%N)".png;;
+              Copy) slurp | grim -g - - | convert - -shave 1x1 PNG:- | wl-copy;;
+              Edit) slurp | grim -g - - | swappy -f -;;
+            esac
+            ;;
+        esac
+      '';
+    })
 
     (writeShellApplication {
       name = "pass-menu";
@@ -140,12 +241,55 @@ in
     TERMINAL = "alacritty";
     VISUAL = "nvim";
     BROWSER = "firefox";
-    QT_QPA_PLATFORMTHEME = "qt5ct";
+    # QT_QPA_PLATFORMTHEME = "qt5ct";
     MOZ_ENABLE_WAYLAND = 1;
     BEMENU_OPTS = "--fb ${mocha.base} --ff ${mocha.text} --nb ${mocha.base} "
       + "--nf ${mocha.text} --tf ${mocha.base} --hf ${mocha.base} --tb ${mocha.teal} "
       + "--hb ${mocha.teal} --nf ${mocha.text} --af ${mocha.text} --ab ${mocha.base} "
       + "-H 24 --hp 8 --ch 16 --cw 2 --fn '${myfont} 10'";
+  };
+
+  gtk = {
+    enable = true;
+    font.name = "Iosevka Nerd Font 14";
+    theme = {
+      name = "Catppuccin-Mocha-Compact-Teal-Dark";
+      package = pkgs.catppuccin-gtk.override {
+        variant = "mocha";
+        accents = [ "teal" ];
+        tweaks = [ "normal" ];
+        size = "compact";
+      };
+    };
+
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = pkgs.catppuccin-papirus-folders;
+    };
+    # Where we define the cursor
+    cursorTheme.name = "macOS-BigSur";
+
+    gtk3.extraConfig = {
+      Settings = ''
+        gtk-application-prefer-dark-theme=1
+      '';
+    };
+    gtk4.extraConfig = {
+      Settings = ''
+        gtk-application-prefer-dark-theme=1
+      '';
+    };
+  };
+  qt = {
+    enable = true;
+    style = {
+      name = "kvantum";
+      package = pkgs.catppuccin-kvantum.override {
+        variant = "Mocha";
+        accent = "Green";
+      };
+    };
+    platformTheme = "gtk";
   };
 
   services.batsignal.enable = true;
@@ -181,12 +325,17 @@ in
     longitude = 55.1;
   };
 
+  services.gpg-agent = {
+    enable = true;
+    pinentryFlavor = "qt";
+  };
+
   services.unclutter.enable = true;
 
   imports = [ inputs.xremap-flake.homeManagerModules.default ];
   services.xremap = {
-    # withWlroots = true;
-    withX11 = true;
+    withWlroots = true;
+    # withX11 = true;
     config = {
       keymap = [
         {
@@ -319,6 +468,7 @@ in
       tree = "exa -l --tree --git";
       cdg = "cd $\(git rev-parse --show-toplevel\)";
       calc = "R --no-save -q";
+      gst = "git status";
     };
     shellOptions = [
       "histappend"
@@ -374,10 +524,6 @@ in
             }
             {
               name = "";
-              url = "https://web.whatsapp.com";
-            }
-            {
-              name = "";
               url = "https://www.messenger.com";
             }
             {
@@ -407,7 +553,10 @@ in
         passff
         tridactyl
       ];
-      search.default = "DuckDuckGo";
+      search = {
+        default = "DuckDuckGo";
+        force = true;
+      };
     };
   };
 
@@ -430,7 +579,6 @@ in
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-    plugins = with pkgs.vimPlugins; [ nvim-treesitter.withAllGrammars ];
   };
 
   programs.password-store.enable = true;
@@ -444,6 +592,13 @@ in
     enableBashIntegration = true;
   };
 
+  programs.taskwarrior = {
+    enable = true;
+    config = {
+      hooks.location = "${config.home.homeDirectory}/.config/task/hooks";
+    };
+  };
+
   programs.tealdeer.enable = true;
 
   programs.zathura.enable = true;
@@ -455,7 +610,7 @@ in
   };
 
   xdg.configFile = {
-    nvim.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/config/nvim";
+    nvim.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/dotfiles/nvim";
   };
 
   xdg.userDirs = {
@@ -469,20 +624,5 @@ in
     publicShare = "$HOME/pub";
     templates = "$HOME/temp";
     videos = "$HOME/vids";
-  };
-
-  wayland.windowManager.hyprland = {
-    # Whether to enable Hyprland wayland compositor
-    enable = true;
-    # The hyprland package to use
-    package = pkgs.hyprland;
-    # Whether to enable XWayland
-    xwayland.enable = true;
-
-    # Optional
-    # Whether to enable hyprland-session.target on hyprland startup
-    systemd.enable = true;
-    # Whether to enable patching wlroots for better Nvidia support
-    enableNvidiaPatches = true;
   };
 }

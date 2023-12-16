@@ -14,6 +14,7 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelParams = [ "psmouse.synaptics_intertouch=0" ];
 
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -35,57 +36,26 @@
     #   useXkbConfig = true; # use xkbOptions in tty.
   };
 
-/*
-  nixpkgs.overlays = [
-    (self: super: {
-      qtile-unwrapped = super.python311Packages.qtile-unwrapped.overrideAttrs (_: rec {
-        postInstall =
-          let
-            qtileSession = ''
-              [Desktop Entry]
-              Name=Qtile Wayland
-              Comment=Qtile on Wayland
-              Exec=qtile start -b wayland
-              Type=Application
-            '';
-          in
-          ''
-            mkdir -p $out/share/wayland-sessions
-            echo "${qtileSession}" &gt; $out/share/wayland-sessions/qtile.desktop
-          '';
-        passthru.providedSessions = [ "qtile" ];
-      });
-    })
-  ];
-  */
   security.polkit.enable = true;
 
-  # Enable the X11 windowing system.
-  /*
-  services.xserver = {
+  services.greetd = {
     enable = true;
-    layout = "gb";
-    xkbOptions = "eurosign:e,caps:escape";
-    libinput.enable = true;
-    displayManager.sddm.enable = true;
-    windowManager.qtile.enable = true;
-    windowManager.qtile.backend = "wayland";
-    # displayManager.sessionPackages = [ pkgs.qtile-unwrapped ];
-      displayManager.lightdm.greeters.mini = {
-      enable = true;
-      user = "h";
-      extraConfig = ''
-      [greeter]
-      show-password-label = false
-      [greeter-theme]
-      background-image = ""
+    settings = {
+      default_session.command = ''
+        ${pkgs.greetd.tuigreet}/bin/tuigreet \
+        --time \
+        --asterisks \
+        --user-menu \
+        --cmd 'qtile start -b wayland'
       '';
-      };
+    };
   };
-  */
+  environment.etc."greetd/environments".text = ''
+    qtile
+  '';
 
   # Enable CUPS to print documents.
-  # services.printing.enable = true;
+  services.printing.enable = true;
 
   # Enable sound.
   # sound.enable = true;
@@ -104,12 +74,10 @@
   users.groups.uinput.members = [ "h" ];
   users.groups.input.members = [ "h" ];
 
-  # Enable touchpad support (enabled default in most desktopManager).
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.h = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [ "wheel" "audio" "video" ];
     packages = with pkgs; [
     ];
   };
@@ -117,11 +85,10 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    ly
+    git
     qtile
-    sway
-    # python311Packages.pywlroots
-    # python311Packages.pywayland
+    brightnessctl
+    gparted
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -144,16 +111,30 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  # Better scheduling for CPU cycles - thanks System76!!!
+  services.system76-scheduler.settings.cfsProfiles.enable = true;
 
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
+  # Enable TLP (better than gnomes internal power manager)
+  services.tlp = {
+    enable = true;
+    settings = {
+      CPU_BOOST_ON_AC = 1;
+      CPU_BOOST_ON_BAT = 0;
+      CPU_SCALING_GOVERNOR_ON_AC = "performance";
+      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
+    };
+  };
+
+  # Disable GNOMEs power management
+  services.power-profiles-daemon.enable = false;
+
+  # Enable powertop
+  powerManagement.powertop.enable = true;
+
+  # Enable thermald (only necessary if on Intel CPUs)
+  services.thermald.enable = true;
+
+  musnix.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

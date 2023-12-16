@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    musnix = { url = "github:musnix/musnix"; };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,10 +29,13 @@
     in
     {
       nixosConfigurations = {
-        nixos = nixpkgs.lib.nixosSystem {
+        default = nixpkgs.lib.nixosSystem {
           inherit pkgs system;
           specialArgs = { inherit system inputs pkgs; };
-          modules = [ ./configuration.nix ];
+          modules = [
+            inputs.musnix.nixosModules.musnix
+            ./hosts/default/configuration.nix
+          ];
         };
       };
       homeConfigurations = {
