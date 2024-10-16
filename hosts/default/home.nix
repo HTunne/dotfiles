@@ -28,6 +28,7 @@ let
     mantle = "#181825";
     crust = "#11111b";
   };
+  mocha2 = import ./mocha.nix;
   myfont = "DejaVuSansM Nerd Font Mono";
 
   /* 
@@ -60,22 +61,11 @@ in
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    # For DE
-    (nerdfonts.override { fonts = [ "DejaVuSansMono" ]; })
-    bemenu
-    libnotify
-    swaybg
-    imagemagick
-    slurp
-    grim
-    swappy
-    wl-clipboard
-    udisks
-
     # Devtools
     bear
     cargo
     commitizen
+    cmake
     gcc
     gnumake
     nodejs
@@ -84,19 +74,18 @@ in
     zip
 
     # Command line
-    fd
-    R
-    ripgrep
-    sxiv
+    diskonaut
     pqiv
-    wget
     timewarrior
+    wayout
     xorg.xlsclients
 
     # NVIM
     # bash
     nodePackages.bash-language-server
     shfmt
+    # c/c++
+    clang-tools
     # cmake
     cmake-language-server
     cmake-format
@@ -109,7 +98,7 @@ in
     selene
     stylua
     # nix
-    rnix-lsp
+    # rnix-lsp
     # openscad
     openscad-lsp
     # python
@@ -124,17 +113,28 @@ in
     tree-sitter
 
     # GUI
+    arduino
+    google-chrome
     backintime
     blueman
+    # cura
+    diylc
+    discord
+    freecad
     gimp
     guvcview
     inkscape
-    kicad
+    kanshi
+    python311Packages.kicad
+    librecad
     libreoffice
     openscad
     pcmanfm
     pinta
+    prusa-slicer
     libsForQt5.qtstyleplugin-kvantum
+    steam
+    wdisplays
 
     #audio
     qpwgraph
@@ -152,87 +152,13 @@ in
     dragonfly-reverb
     helm
     hydrogen
+    pwvucontrol
     tap-plugins
     vmpk
     wolf-shaper
     yoshimi
     zam-plugins
 
-
-    (writeShellApplication {
-      name = "grimwrap";
-      runtimeInputs = [ grim slurp wl-clipboard swappy imagemagick ];
-      text = ''
-        inopt=$(echo -e "Fullscreen\nSelect" | bemenu "$@" -p 'Screenshot input')
-        outopt=$(echo -e "Save\nCopy\nEdit" | bemenu "$@" -p 'Screenshot output')
-        case $inopt in
-          Fullscreen)
-            case $outopt in
-              Save) grim "$HOME"/pics/scrns/"$(date -u +%Y-%m-%d-%H-%M-%S-%N)".png;;
-              Copy) grim - | convert - -shave 1x1 PNG:- | wl-copy;;
-              Edit) grim - | swappy -f -;;
-            esac
-           ;;
-          Select)
-            case $outopt in
-              Save) slurp | grim -g - "$HOME"/pics/scrns/"$(date -u +%Y-%m-%d-%H-%M-%S-%N)".png;;
-              Copy) slurp | grim -g - - | convert - -shave 1x1 PNG:- | wl-copy;;
-              Edit) slurp | grim -g - - | swappy -f -;;
-            esac
-            ;;
-        esac
-      '';
-    })
-
-    (writeShellApplication {
-      name = "pass-menu";
-      runtimeInputs = [ bemenu ];
-      text = ''
-        pushd "$PASSWORD_STORE_DIR" || exit
-        password=$(fd --extension gpg | sed 's/\.gpg//' | bemenu -p pass "$@")
-        [[ -n $password ]] || exit
-        pass show -c "$password" 2>/dev/null
-        popd >/dev/null 2>&1
-      '';
-    })
-
-    (writeShellApplication {
-      name = "powermenu";
-      runtimeInputs = [ bemenu ];
-      text = ''
-        choice=$(echo -e "Shutdown\nLogout\nReboot" | bemenu "$@" -p 'Power')
-        case $choice in
-          Shutdown) poweroff;;
-          Reboot) reboot;;
-          Logout) qtile cmd-obj -o cmd -f shutdown;;
-        esac
-      '';
-    })
-
-    (writeShellApplication {
-      name = "ex";
-      runtimeInputs = [ gnutar bzip2 unrar gzip unzip p7zip ];
-      text = ''
-        if [ -f "$1" ] ; then
-          case $1 in
-            *.tar.bz2)   tar xjf "$1"   ;;
-            *.tar.gz)    tar xzf "$1"   ;;
-            *.bz2)       bunzip2 "$1"   ;;
-            *.rar)       unrar x "$1"   ;;
-            *.gz)        gunzip "$1"    ;;
-            *.tar)       tar xf "$1"    ;;
-            *.tbz2)      tar xjf "$1"   ;;
-            *.tgz)       tar xzf "$1"   ;;
-            *.zip)       unzip "$1"     ;;
-            *.Z)         uncompress "$1";;
-            *.7z)        7z x "$1"      ;;
-            *)           echo "'$1' cannot be extracted via ex" ;;
-          esac
-        else
-          echo "'$1' is not a valid file"
-        fi
-      '';
-    })
   ];
 
   home.file = { };
@@ -241,9 +167,10 @@ in
     TERMINAL = "alacritty";
     VISUAL = "nvim";
     BROWSER = "firefox";
+    QT_QPA_PLATFORM = "wayland";
     # QT_QPA_PLATFORMTHEME = "qt5ct";
     MOZ_ENABLE_WAYLAND = 1;
-    BEMENU_OPTS = "--fb ${mocha.base} --ff ${mocha.text} --nb ${mocha.base} "
+    BEMENU_OPTS = "--fb ${mocha2.base} --ff ${mocha.text} --nb ${mocha.base} "
       + "--nf ${mocha.text} --tf ${mocha.base} --hf ${mocha.base} --tb ${mocha.teal} "
       + "--hb ${mocha.teal} --nf ${mocha.text} --af ${mocha.text} --ab ${mocha.base} "
       + "-H 24 --hp 8 --ch 16 --cw 2 --fn '${myfont} 10'";
@@ -251,7 +178,7 @@ in
 
   gtk = {
     enable = true;
-    font.name = "Iosevka Nerd Font 14";
+    font.name = "DejaVuSansM Nerd Font 14";
     theme = {
       name = "Catppuccin-Mocha-Compact-Teal-Dark";
       package = pkgs.catppuccin-gtk.override {
@@ -289,10 +216,8 @@ in
         accent = "Green";
       };
     };
-    platformTheme = "gtk";
+    platformTheme.name = "gtk";
   };
-
-  services.batsignal.enable = true;
 
   services.dunst = {
     enable = true;
@@ -319,19 +244,6 @@ in
     };
   };
 
-  services.gammastep = {
-    enable = true;
-    latitude = 0.1;
-    longitude = 55.1;
-  };
-
-  services.gpg-agent = {
-    enable = true;
-    pinentryFlavor = "qt";
-  };
-
-  services.unclutter.enable = true;
-
   imports = [ inputs.xremap-flake.homeManagerModules.default ];
   services.xremap = {
     withWlroots = true;
@@ -341,7 +253,7 @@ in
         {
           name = "bemenu";
           remap = {
-            leftalt-p = {
+            super-p = {
               launch = [ "bemenu-run" ];
             };
           };
@@ -383,10 +295,11 @@ in
             foreground = "${mocha.base}";
             background = "${mocha.green}";
           };
-          footer_bar = {
-            foreground = "${mocha.base}";
-            background = "${mocha.subtext0}";
-          };
+        };
+
+        footer_bar = {
+          foreground = "${mocha.base}";
+          background = "${mocha.subtext0}";
         };
 
         # Keyboard regex hints
@@ -449,41 +362,6 @@ in
         # };
       };
     };
-  };
-
-  programs.bat.enable = true;
-
-  programs.bash = {
-    enable = true;
-    shellAliases = {
-      more = "less";
-      mnt = "udisksctl mount -b";
-      umnt = "udisksctl unmount -b";
-      ssh = "TERM=xterm-256color ssh";
-      ls = "exa --git";
-      la = "exa -a --git";
-      ll = "exa -l --git";
-      lt = "exa -l -snew --git";
-      lr = "exa -l --tree --level=3 --git";
-      tree = "exa -l --tree --git";
-      cdg = "cd $\(git rev-parse --show-toplevel\)";
-      calc = "R --no-save -q";
-      gst = "git status";
-    };
-    shellOptions = [
-      "histappend"
-      "checkwinsize"
-      "extglob"
-      "globstar"
-      "checkjobs"
-    ];
-    initExtra = "set -o vi";
-  };
-
-  programs.bottom.enable = true;
-
-  programs.eza = {
-    enable = true;
   };
 
   programs.firefox = {
@@ -569,11 +447,6 @@ in
 
   programs.home-manager.enable = true;
 
-  programs.mcfly = {
-    enable = true;
-    enableBashIntegration = true;
-  };
-
   programs.mpv.enable = true;
 
   programs.neovim = {
@@ -587,11 +460,6 @@ in
     enable = true;
   };
 
-  programs.starship = {
-    enable = true;
-    enableBashIntegration = true;
-  };
-
   programs.taskwarrior = {
     enable = true;
     config = {
@@ -599,15 +467,7 @@ in
     };
   };
 
-  programs.tealdeer.enable = true;
-
   programs.zathura.enable = true;
-
-  programs.zoxide = {
-    enable = true;
-    enableBashIntegration = true;
-    options = [ "--cmd" "cd" ];
-  };
 
   xdg.configFile = {
     nvim.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/dotfiles/nvim";

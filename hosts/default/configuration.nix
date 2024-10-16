@@ -16,7 +16,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelParams = [ "psmouse.synaptics_intertouch=0" ];
 
-  # networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "h-think"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
@@ -32,7 +32,7 @@
   i18n.defaultLocale = "en_GB.UTF-8";
   console = {
     #   font = "Lat2-Terminus16";
-    keyMap = "us";
+    keyMap = "uk";
     #   useXkbConfig = true; # use xkbOptions in tty.
   };
 
@@ -53,6 +53,8 @@
   environment.etc."greetd/environments".text = ''
     qtile
   '';
+
+  services.udisks2.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -77,7 +79,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.h = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "audio" "video" ];
+    extraGroups = [ "wheel" "audio" "video" "dialout" ];
     packages = with pkgs; [
     ];
   };
@@ -86,10 +88,16 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     git
-    qtile
+    glxinfo
+    lshw
+    pciutils
     brightnessctl
     gparted
   ];
+
+  services.xserver.windowManager.qtile.enable = true;
+
+  programs.dconf.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -111,28 +119,16 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  # Better scheduling for CPU cycles - thanks System76!!!
-  services.system76-scheduler.settings.cfsProfiles.enable = true;
-
-  # Enable TLP (better than gnomes internal power manager)
-  services.tlp = {
-    enable = true;
-    settings = {
-      CPU_BOOST_ON_AC = 1;
-      CPU_BOOST_ON_BAT = 0;
-      CPU_SCALING_GOVERNOR_ON_AC = "performance";
-      CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-    };
-  };
-
-  # Disable GNOMEs power management
-  services.power-profiles-daemon.enable = false;
-
-  # Enable powertop
-  powerManagement.powertop.enable = true;
-
   # Enable thermald (only necessary if on Intel CPUs)
   services.thermald.enable = true;
+
+  services.blueman.enable = true;
+
+  virtualisation.docker.enable = true;
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
 
   musnix.enable = true;
 

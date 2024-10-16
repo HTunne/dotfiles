@@ -22,8 +22,9 @@
       pkgs = import nixpkgs {
         inherit system;
         config.allowUnfree = true;
+        config.nvidia.acceptLicense = true;
         overlays = [
-          inputs.neovim-nightly-overlay.overlay
+          inputs.neovim-nightly-overlay.overlays.default
         ];
       };
     in
@@ -35,18 +36,19 @@
           modules = [
             inputs.musnix.nixosModules.musnix
             ./hosts/default/configuration.nix
+            ./modules/nixos/battery.nix
           ];
         };
       };
       homeConfigurations = {
-        "h" = inputs.home-manager.lib.homeManagerConfiguration {
+        default = inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = { inherit inputs; };
-          modules = [ ./home.nix ];
-          #configuration = { pkgs, ... }:
-          #{
-          #  nixpkgs.overlays = pkgs.overlays;
-          #};
+          modules = [
+            ./hosts/default/home.nix
+            ./modules/home-manager/shell.nix
+            ./modules/home-manager/wm-base.nix
+          ];
         };
       };
     };
