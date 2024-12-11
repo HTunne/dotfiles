@@ -1,20 +1,21 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running `nixos-help`).
-
-{ config, inputs, pkgs, ... }:
-
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  config,
+  inputs,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = [ "psmouse.synaptics_intertouch=0" ];
+  boot.kernelParams = ["psmouse.synaptics_intertouch=0"];
 
   networking.hostName = "h-think"; # Define your hostname.
   # Pick only one of the below networking options.
@@ -34,24 +35,28 @@
     #   font = "Lat2-Terminus16";
     keyMap = "uk";
     #   useXkbConfig = true; # use xkbOptions in tty.
+    catppuccin = {
+      enable = true;
+      flavor = "mocha";
+    };
   };
 
   security.polkit.enable = true;
 
+  security.pam.services.hyprlock = {};
+
   services.greetd = {
     enable = true;
-    settings = {
-      default_session.command = ''
-        ${pkgs.greetd.tuigreet}/bin/tuigreet \
-        --time \
-        --asterisks \
-        --user-menu \
-        --cmd 'qtile start -b wayland'
-      '';
+    settings = rec {
+      initial_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --time-format '%I:%M %p | %a • %h | %F' --cmd Hyprland";
+        user = "h";
+      };
+      default_session = initial_session;
     };
   };
   environment.etc."greetd/environments".text = ''
-    qtile
+    hyprland
   '';
 
   services.udisks2.enable = true;
@@ -68,18 +73,18 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    jack.enable = true;
+    # jack.enable = true;
   };
 
   # Enable xremap
   hardware.uinput.enable = true;
-  users.groups.uinput.members = [ "h" ];
-  users.groups.input.members = [ "h" ];
+  users.groups.uinput.members = ["h"];
+  users.groups.input.members = ["h"];
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.h = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "audio" "video" "dialout" ];
+    extraGroups = ["wheel" "audio" "video" "dialout"];
     packages = with pkgs; [
     ];
   };
@@ -90,12 +95,16 @@
     git
     glxinfo
     lshw
+    psmisc
     pciutils
     brightnessctl
     gparted
+    greetd.tuigreet
   ];
 
-  services.xserver.windowManager.qtile.enable = true;
+  # services.xserver.windowManager.qtile.enable = true;
+  # programs.hyprland.enable = true;
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   programs.dconf.enable = true;
 
@@ -124,6 +133,10 @@
 
   services.blueman.enable = true;
 
+  services.avahi.enable = true;
+
+  services.resolved.enable = true;
+
   virtualisation.docker.enable = true;
   virtualisation.docker.rootless = {
     enable = true;
@@ -139,6 +152,16 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.05"; # Did you read the comment?
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-}
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
+  catppuccin = {
+    enable = true;
+    flavor = "mocha";
+  };
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    ell
+    glibc
+  ];
+}

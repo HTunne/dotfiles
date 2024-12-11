@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    catppuccin.url = "github:catppuccin/nix";
     musnix = { url = "github:musnix/musnix"; };
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -16,7 +17,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, catppuccin, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = import nixpkgs {
@@ -36,6 +37,7 @@
           modules = [
             inputs.musnix.nixosModules.musnix
             ./hosts/default/configuration.nix
+            catppuccin.nixosModules.catppuccin
             ./modules/nixos/battery.nix
           ];
         };
@@ -46,8 +48,10 @@
           extraSpecialArgs = { inherit inputs; };
           modules = [
             ./hosts/default/home.nix
+            catppuccin.homeManagerModules.catppuccin
             ./modules/home-manager/shell.nix
             ./modules/home-manager/wm-base.nix
+            ./modules/home-manager/hyprland.nix
           ];
         };
       };

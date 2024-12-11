@@ -1,49 +1,21 @@
-{ config, pkgs, inputs, ... }:
-let
-  mocha = {
-    rosewater = "#f5e0dc";
-    flamingo = "#f2cdcd";
-    pink = "#f5c2e7";
-    mauve = "#cba6f7";
-    red = "#f38ba8";
-    maroon = "#eba0ac";
-    peach = "#fab387";
-    yellow = "#f9e2af";
-    green = "#a6e3a1";
-    teal = "#94e2d5";
-    sky = "#89dceb";
-    sapphire = "#74c7ec";
-    blue = "#89b4fa";
-    lavender = "#b4befe";
-    text = "#cdd6f4";
-    subtext1 = "#bac2de";
-    subtext0 = "#a6adc8";
-    overlay2 = "#9399b2";
-    overlay1 = "#7f849c";
-    overlay0 = "#6c7086";
-    surface2 = "#585b70";
-    surface1 = "#45475a";
-    surface0 = "#313244";
-    base = "#1e1e2e";
-    mantle = "#181825";
-    crust = "#11111b";
-  };
-  mocha2 = import ./mocha.nix;
-  myfont = "DejaVuSansM Nerd Font Mono";
-
-  /* 
-    pkgs.overlays = pkgs.overlays ++ [
-    (final: prev: {
-    hello = prev.hello.overrideAttrs (old: {
-    postInstall = (old.postInstall or "") + ''
-    install ext/on-modify.timewarrior "${config.home.homeDirectory}/.config/task/hooks/";
-    '';
-    });
-    })
-    ];
-  */
-in
 {
+  config,
+  pkgs,
+  inputs,
+  ...
+}: let
+  /*
+  pkgs.overlays = pkgs.overlays ++ [
+  (final: prev: {
+  hello = prev.hello.overrideAttrs (old: {
+  postInstall = (old.postInstall or "") + ''
+  install ext/on-modify.timewarrior "${config.home.homeDirectory}/.config/task/hooks/";
+  '';
+  });
+  })
+  ];
+  */
+in {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "h";
@@ -98,7 +70,8 @@ in
     selene
     stylua
     # nix
-    # rnix-lsp
+    nixd
+    alejandra
     # openscad
     openscad-lsp
     # python
@@ -107,6 +80,8 @@ in
     yapf
     isort
     python311Packages.vulture
+    # typescript
+    typescript-language-server
     # vue
     nodePackages.vue-language-server
 
@@ -120,7 +95,7 @@ in
     # cura
     diylc
     discord
-    freecad
+    freecad-wayland
     gimp
     guvcview
     inkscape
@@ -141,227 +116,69 @@ in
     ardour
     audacity
     AMB-plugins
-    avldrums-lv2
     bespokesynth
     calf
     cardinal
     caps
     bchoppr
     dexed
-    distrho
+    # distrho
     dragonfly-reverb
-    helm
+    # helm
     hydrogen
     pwvucontrol
     tap-plugins
     vmpk
     wolf-shaper
+    x42-avldrums
     yoshimi
     zam-plugins
-
   ];
 
-  home.file = { };
+  nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+
+  home.file = {};
 
   home.sessionVariables = {
-    TERMINAL = "alacritty";
+    TERMINAL = "foot";
     VISUAL = "nvim";
     BROWSER = "firefox";
-    QT_QPA_PLATFORM = "wayland";
-    # QT_QPA_PLATFORMTHEME = "qt5ct";
-    MOZ_ENABLE_WAYLAND = 1;
-    BEMENU_OPTS = "--fb ${mocha2.base} --ff ${mocha.text} --nb ${mocha.base} "
-      + "--nf ${mocha.text} --tf ${mocha.base} --hf ${mocha.base} --tb ${mocha.teal} "
-      + "--hb ${mocha.teal} --nf ${mocha.text} --af ${mocha.text} --ab ${mocha.base} "
-      + "-H 24 --hp 8 --ch 16 --cw 2 --fn '${myfont} 10'";
   };
 
   gtk = {
     enable = true;
     font.name = "DejaVuSansM Nerd Font 14";
-    theme = {
-      name = "Catppuccin-Mocha-Compact-Teal-Dark";
-      package = pkgs.catppuccin-gtk.override {
-        variant = "mocha";
-        accents = [ "teal" ];
-        tweaks = [ "normal" ];
-        size = "compact";
-      };
-    };
-
-    iconTheme = {
-      name = "Papirus-Dark";
-      package = pkgs.catppuccin-papirus-folders;
-    };
-    # Where we define the cursor
-    cursorTheme.name = "macOS-BigSur";
-
-    gtk3.extraConfig = {
-      Settings = ''
-        gtk-application-prefer-dark-theme=1
-      '';
-    };
-    gtk4.extraConfig = {
-      Settings = ''
-        gtk-application-prefer-dark-theme=1
-      '';
-    };
   };
   qt = {
     enable = true;
-    style = {
-      name = "kvantum";
-      package = pkgs.catppuccin-kvantum.override {
-        variant = "Mocha";
-        accent = "Green";
-      };
-    };
-    platformTheme.name = "gtk";
-  };
-
-  services.dunst = {
-    enable = true;
-    settings = {
-      global = {
-        frame_color = "${mocha.blue}";
-        separator_color = "frame";
-        offset = "0x24";
-        font = "${myfont}";
-      };
-      urgency_low = {
-        background = "${mocha.base}";
-        foreground = "${mocha.text}";
-      };
-      urgency_normal = {
-        background = "${mocha.base}";
-        foreground = "${mocha.text}";
-      };
-      urgency_critical = {
-        background = "${mocha.base}";
-        foreground = "${mocha.text}";
-        frame_color = "${mocha.peach}";
-      };
-    };
-  };
-
-  imports = [ inputs.xremap-flake.homeManagerModules.default ];
-  services.xremap = {
-    withWlroots = true;
-    # withX11 = true;
-    config = {
-      keymap = [
-        {
-          name = "bemenu";
-          remap = {
-            super-p = {
-              launch = [ "bemenu-run" ];
-            };
-          };
-        }
-      ];
-    };
+    style.name = "kvantum";
+    platformTheme.name = "kvantum";
+    style.catppuccin.enable = false;
   };
 
   programs.alacritty = {
     enable = true;
+    settings.shell.program = "${pkgs.nushell}/bin/nu";
+  };
+
+  programs.foot = {
+    enable = true;
+    server.enable = true;
     settings = {
-      font.normal.family = "${myfont}";
-      colors = {
-        primary = {
-          background = "${mocha.base}";
-          foreground = "${mocha.text}";
-          # Bright and dim foreground colors
-          dim_foreground = "${mocha.text}";
-          bright_foreground = "${mocha.text}";
-        };
+      main = {
+        shell = "${pkgs.nushell}/bin/nu";
+        font = "DejaVuSansM Nerd Font Mono:size=10";
+      };
 
-        # Cursor colors
-        cursor = {
-          text = "${mocha.base}";
-          cursor = "${mocha.rosewater}";
-        };
-        vi_mode_cursor = {
-          text = "${mocha.base}";
-          cursor = "${mocha.lavender}";
-        };
-
-        # Search colors
-        search = {
-          matches = {
-            foreground = "${mocha.base}";
-            background = "${mocha.subtext0}";
-          };
-          focused_match = {
-            foreground = "${mocha.base}";
-            background = "${mocha.green}";
-          };
-        };
-
-        footer_bar = {
-          foreground = "${mocha.base}";
-          background = "${mocha.subtext0}";
-        };
-
-        # Keyboard regex hints
-        hints = {
-          start = {
-            foreground = "${mocha.base}";
-            background = "${mocha.yellow}";
-          };
-          end = {
-            foreground = "${mocha.base}";
-            background = "${mocha.subtext0}";
-          };
-        };
-
-        # Selection colors
-        selection = {
-          text = "${mocha.base}";
-          background = "${mocha.rosewater}";
-        };
-
-        # Normal colors
-        normal = {
-          black = "${mocha.surface1}";
-          red = "${mocha.red}";
-          green = "${mocha.green}";
-          yellow = "${mocha.yellow}";
-          blue = "${mocha.blue}";
-          magenta = "${mocha.pink}";
-          cyan = "${mocha.teal}";
-          white = "${mocha.subtext1}";
-        };
-
-        # Bright colors
-        bright = {
-          black = "${mocha.surface2}";
-          red = "${mocha.red}";
-          green = "${mocha.green}";
-          yellow = "${mocha.yellow}";
-          blue = "${mocha.blue}";
-          magenta = "${mocha.pink}";
-          cyan = "${mocha.teal}";
-          white = "${mocha.subtext0}";
-        };
-
-        # Dim colors
-        dim = {
-          black = "${mocha.surface1}";
-          red = "${mocha.red}";
-          green = "${mocha.green}";
-          yellow = "${mocha.yellow}";
-          blue = "${mocha.blue}";
-          magenta = "${mocha.pink}";
-          cyan = "${mocha.teal}";
-          white = "${mocha.subtext1}";
-        };
-
-        # indexed_colors = {
-        # "- { index: 16, color: \"${mocha.peach}\" }";
-        # "- { index: 17, color: \"${mocha.rosewater}\" }";
-        # };
+      mouse = {
+        hide-when-typing = "yes";
       };
     };
+  };
+
+  programs.browserpass = {
+    enable = true;
+    browsers = ["firefox"];
   };
 
   programs.firefox = {
@@ -372,6 +189,10 @@ in
           name = "toolbar";
           toolbar = true;
           bookmarks = [
+            {
+              name = "";
+              url = "http://homeassistant.local:8123";
+            }
             {
               name = "";
               url = "https://mail.proton.me";
@@ -452,6 +273,7 @@ in
   programs.neovim = {
     enable = true;
     defaultEditor = true;
+    catppuccin.enable = false;
   };
 
   programs.password-store.enable = true;
@@ -484,5 +306,12 @@ in
     publicShare = "$HOME/pub";
     templates = "$HOME/temp";
     videos = "$HOME/vids";
+  };
+
+  catppuccin = {
+    enable = true;
+    flavor = "mocha";
+    pointerCursor.enable = true;
+    pointerCursor.accent = "teal";
   };
 }
