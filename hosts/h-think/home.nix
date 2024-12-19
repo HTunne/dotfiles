@@ -83,7 +83,7 @@ in {
     # typescript
     typescript-language-server
     # vue
-    nodePackages.vue-language-server
+    vscode-extensions.vue.volar
 
     tree-sitter
 
@@ -149,11 +149,11 @@ in {
     enable = true;
     font.name = "DejaVuSansM Nerd Font 14";
   };
+
   qt = {
     enable = true;
     style.name = "kvantum";
     platformTheme.name = "kvantum";
-    style.catppuccin.enable = false;
   };
 
   programs.alacritty = {
@@ -273,7 +273,6 @@ in {
   programs.neovim = {
     enable = true;
     defaultEditor = true;
-    catppuccin.enable = false;
   };
 
   programs.password-store.enable = true;
@@ -311,7 +310,9 @@ in {
   catppuccin = {
     enable = true;
     flavor = "mocha";
-    pointerCursor.enable = true;
-    pointerCursor.accent = "teal";
+    cursors.enable = true;
+    cursors.accent = "teal";
+    nvim.enable = false;
+    kvantum.enable = false;
   };
 }

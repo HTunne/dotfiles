@@ -49,10 +49,8 @@
       cdg = "cd $\(git rev-parse --show-toplevel\)";
       calc = "R --no-save -q";
       gst = "git status";
-      hms = "home-manager switch --flake ~/.config/dotfiles#default";
-      nxs = "sudo nixos-rebuild switch --flake ~/.config/dotfiles#default";
-      hmsu = "home-manager switch --recreate-lock-file --flake ~/.config/dotfiles#default";
-      nxsu = "sudo nixos-rebuild switch --recreate-lock-file --flake ~/.config/dotfiles#default";
+      hms = "home-manager switch --flake ~/.config/dotfiles#$\(hostname\)";
+      nxs = "sudo nixos-rebuild switch --flake ~/.config/dotfiles#$\(hostname\)";
     };
     shellOptions = [
       "histappend"
@@ -78,10 +76,8 @@
       cdg = "cd (git rev-parse --show-toplevel)";
       calc = "R --no-save -q";
       gst = "git status";
-      hms = "home-manager switch --flake ~/.config/dotfiles#default";
-      nxs = "sudo nixos-rebuild switch --flake ~/.config/dotfiles#default";
-      hmsu = "home-manager switch --recreate-lock-file --flake ~/.config/dotfiles#default";
-      nxsu = "sudo nixos-rebuild switch --recreate-lock-file --flake ~/.config/dotfiles#default";
+      hms = "home-manager switch --flake ~/.config/dotfiles#(hostname)";
+      nxs = "sudo nixos-rebuild switch --flake ~/.config/dotfiles#(hostname)";
     };
     configFile.text = ''
 const color_palette = {

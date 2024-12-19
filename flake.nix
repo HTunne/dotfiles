@@ -31,23 +31,23 @@
     in
     {
       nixosConfigurations = {
-        default = nixpkgs.lib.nixosSystem {
+        h-think = nixpkgs.lib.nixosSystem {
           inherit pkgs system;
           specialArgs = { inherit system inputs pkgs; };
           modules = [
             inputs.musnix.nixosModules.musnix
-            ./hosts/default/configuration.nix
+            ./hosts/h-think/configuration.nix
             catppuccin.nixosModules.catppuccin
             ./modules/nixos/battery.nix
           ];
         };
       };
       homeConfigurations = {
-        default = inputs.home-manager.lib.homeManagerConfiguration {
+        h-think = inputs.home-manager.lib.homeManagerConfiguration {
           inherit pkgs;
           extraSpecialArgs = { inherit inputs; };
           modules = [
-            ./hosts/default/home.nix
+            ./hosts/h-think/home.nix
             catppuccin.homeManagerModules.catppuccin
             ./modules/home-manager/shell.nix
             ./modules/home-manager/wm-base.nix
