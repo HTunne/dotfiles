@@ -102,6 +102,7 @@ in {
           "$mod SHIFT, C, exec, timew continue"
           "$mod, F1, exec, killall .waybar-wrapped; waybar &"
           "$mod, F2, exec, networkmanager_dmenu"
+          "$mod, F3, exec, monitormenu"
           "$mod, LEFT, movefocus, l"
           "$mod SHIFT, LEFT, movewindow, l"
           "$mod, DOWN, movefocus, d"
@@ -127,7 +128,7 @@ in {
                   builtins.toString (x + 1 - (c * 10));
               in [
                 "$mod, ${ws}, workspace, ${toString (x + 1)}"
-                "$mod SHIFT, ${ws}, movetoworkspace, ${toString (x + 1)}"
+                "$mod SHIFT, ${ws}, movetoworkspacesilent, ${toString (x + 1)}"
               ]
             )
             10)
