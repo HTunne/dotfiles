@@ -22,6 +22,7 @@ in {
     swappy
     wl-clipboard
     networkmanager_dmenu
+    brightnessctl
     # udisks
 
     (writeShellApplication {

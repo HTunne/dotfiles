@@ -11,6 +11,47 @@
 in {
   home.packages = with pkgs; [
     hyprcursor
+
+    (writeShellApplication {
+      name = "monitormenu";
+      runtimeInputs = [bemenu];
+      text = ''
+        monitors=$(hyprctl monitors all | awk '{if ($1 == "Monitor") print $2}')
+        choice=$(echo "$monitors" | sed 's/ /\n/' | bemenu)
+        echo "$choice"
+        for monitor in $monitors;
+        do
+
+          if [ "$monitor" = "$choice" ]; then
+            echo "enable" "$monitor"
+            hyprctl keyword monitor "$monitor",preferred,auto,1
+          else
+            echo "disable" "$monitor"
+            hyprctl keyword monitor "$monitor",disable
+          fi
+        done
+      '';
+    })
+
+    (writeShellApplication {
+      name = "timewarrior-bar";
+      runtimeInputs = [timewarrior];
+      text = ''
+        out=$(timew)
+
+        task=$( echo "$out" | grep "Tracking" | awk -F 'Tracking ' '{ print $2 }')
+        time=$( echo "$out" | grep "Total" | awk '{ print $2 }')
+
+        printf "%s %s" "$task" "$time"
+
+        [[ "$time" = "0:25:00" ]] && notify-send "You've been working on $task for 25 minutes." "Time for a break."
+
+        if [[ "$task" = "break short" && "$time" = "0:05:00" ]]  || [[ "$task" = "break long" && "$time" = "0:15:00" ]]; then
+            notify-send "Play time is over." "Get back to work."
+            # paplay ~/.scripts/bell-counter.wav
+        fi
+      '';
+    })
   ];
 
   home.sessionVariables = {
@@ -55,6 +96,10 @@ in {
           "$mod SHIFT, K, movewindow, u"
           "$mod, L, movefocus, r"
           "$mod SHIFT, L, movewindow, r"
+          "$mod, X, exec, timew start short break"
+          "$mod SHIFT, X, exec, timew start long break"
+          "$mod, C, exec, timew continue @2"
+          "$mod SHIFT, C, exec, timew continue"
           "$mod, F1, exec, killall .waybar-wrapped; waybar &"
           "$mod, F2, exec, networkmanager_dmenu"
           "$mod, LEFT, movefocus, l"
@@ -118,9 +163,9 @@ in {
         "col.inactive_border" = "$base";
       };
       animations.enabled = false;
-      monitor = [
-        ",preffered,auto,1,mirror,DP-2,bitdepth,8"
-      ];
+      # monitor = [
+      # ",preffered,auto,1,mirror,DP-2,bitdepth,8"
+      # ];
       misc = {
         force_default_wallpaper = 1;
         disable_hyprland_logo = true;
@@ -145,7 +190,7 @@ in {
         position = "top";
         modules-left = ["hyprland/workspaces"];
         modules-center = ["hyprland/window"];
-        modules-right = ["network" "wireplumber" "backlight" "battery" "clock"];
+        modules-right = ["custom/task" "network" "wireplumber" "backlight" "battery" "clock"];
         "hyprland/workspaces" = {
           format = "{icon}";
           on-scroll-up = "hyprctl dispatch workspace e+1";
@@ -194,6 +239,10 @@ in {
           tooltip-format-ethernet = "  {ifname}";
           tooltip-format-disconnected = "Disconnected";
           max-length = 50;
+        };
+        "custom/task" = {
+          exec = "~/.nix-profile/bin/timewarrior-bar";
+          restart-interval = 1;
         };
       };
     };
