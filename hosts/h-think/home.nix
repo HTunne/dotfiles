@@ -164,7 +164,6 @@ in {
     server.enable = true;
     settings = {
       main = {
-        shell = "${pkgs.nushell}/bin/nu";
         font = "DejaVuSansM Nerd Font Mono:size=10";
       };
 
