@@ -35,10 +35,6 @@
     #   font = "Lat2-Terminus16";
     keyMap = "uk";
     #   useXkbConfig = true; # use xkbOptions in tty.
-    catppuccin = {
-      enable = true;
-      flavor = "mocha";
-    };
   };
 
   security.polkit.enable = true;
@@ -163,6 +159,9 @@
   catppuccin = {
     enable = true;
     flavor = "mocha";
+    tty = {
+      enable = true;
+    };
   };
 
   programs.nix-ld.enable = true;
