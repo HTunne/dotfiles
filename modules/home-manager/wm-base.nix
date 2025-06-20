@@ -27,9 +27,9 @@ in {
 
     (writeShellApplication {
       name = "grimwrap";
-      runtimeInputs = [grim slurp wl-clipboard swappy imagemagick];
+      runtimeInputs = [grim slurp wl-clipboard swappy imagemagick jq];
       text = ''
-        inopt=$(echo -e "Fullscreen\nSelect" | bemenu "$@" -p 'Screenshot input')
+        inopt=$(echo -e "Fullscreen\nSelect\nActive" | bemenu "$@" -p 'Screenshot input')
         outopt=$(echo -e "Save\nCopy\nEdit" | bemenu "$@" -p 'Screenshot output')
         case $inopt in
           Fullscreen)
@@ -44,6 +44,13 @@ in {
               Save) slurp | grim -g - "$HOME"/pics/scrns/"$(date -u +%Y-%m-%d-%H-%M-%S-%N)".png;;
               Copy) slurp | grim -g - - | convert - -shave 1x1 PNG:- | wl-copy;;
               Edit) slurp | grim -g - - | swappy -f -;;
+            esac
+            ;;
+          Active)
+            case $outopt in
+              Save) hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' | grim -g - "$HOME"/pics/scrns/"$(date -u +%Y-%m-%d-%H-%M-%S-%N)".png;;
+              Copy) hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' | grim -g - - | convert - -shave 1x1 PNG:- | wl-copy;;
+              Edit) hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"' | grim -g - - | swappy -f -;;
             esac
             ;;
         esac
