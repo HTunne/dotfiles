@@ -154,6 +154,12 @@
   system.stateVersion = "23.05"; # Did you read the comment?
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
   catppuccin = {
     enable = true;
     flavor = "mocha";
