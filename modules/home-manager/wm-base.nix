@@ -74,6 +74,14 @@ in {
         esac
       '';
     })
+
+    (writeShellApplication {
+      name = "pickcolour";
+      runtimeInputs = [grim slurp imagemagick];
+      text = ''
+        grim -g "$(slurp -p)" -t ppm - | magick - -format '%[hex:p{0,0}]' info:- | wl-copy
+      '';
+    })
   ];
 
   programs.bottom.enable = true;

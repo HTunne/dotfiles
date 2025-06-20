@@ -81,7 +81,7 @@ in {
           "$mod SHIFT, I, resizeactive, 0 10"
           "$mod, O, exec, firefox"
           "$mod SHIFT, O, resizeactive, 10 0"
-          "$mod, P, exec, firefox"
+          "$mod, P, exec, pickcolour"
           "$mod, A, togglespecialworkspace, audio"
           "$mod SHIFT, A, togglespecialworkspace, audio"
           "$mod, S, exec, firefox"
