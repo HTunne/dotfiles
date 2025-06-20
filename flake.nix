@@ -51,11 +51,11 @@
       };
     };
     homeConfigurations = {
-      default = inputs.home-manager.lib.homeManagerConfiguration {
+      h-think = inputs.home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         extraSpecialArgs = {inherit inputs;};
         modules = [
-          ./hosts/default/home.nix
+          ./hosts/h-think/home.nix
           catppuccin.homeManagerModules.catppuccin
           ./modules/home-manager/shell.nix
           ./modules/home-manager/wm-base.nix
