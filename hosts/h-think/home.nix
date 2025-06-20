@@ -46,7 +46,6 @@ in {
     zip
 
     # Command line
-    diskonaut
     pqiv
     timewarrior
     wayout
