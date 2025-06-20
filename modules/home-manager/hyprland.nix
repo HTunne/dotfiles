@@ -136,7 +136,7 @@ in {
       workspace = [
         "special:term, on-created-empty:[float;size 80% 80%;opacity 0.9] foot"
         "special:monitor, on-created-empty:[float;size 80% 80%;opacity 0.9] foot -e btm"
-        "special:calc, on-created-empty:[float;size 80% 80%;opacity 0.9] foot -e R -q --vanilla"
+        "special:calc, on-created-empty:[float;size 80% 80%;opacity 0.9] foot -e qalc"
         "special:audio, on-created-empty:[float;size 80% 80%;opacity 0.9] pwvucontrol"
       ];
       bindm = [

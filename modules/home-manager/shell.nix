@@ -6,7 +6,7 @@
 }: {
   home.packages = with pkgs; [
     fd
-    R
+    libqalculate
     ripgrep
     wget
     (writeShellApplication {
@@ -51,7 +51,6 @@
       lr = "eza -l --tree --level=3 --git";
       tree = "eza -l --tree --git";
       cdg = "cd $\(git rev-parse --show-toplevel\)";
-      calc = "R --no-save -q";
       gst = "git status";
       hms = "home-manager switch --flake ~/.config/dotfiles#$\(hostname\)";
       nxs = "sudo nixos-rebuild switch --flake ~/.config/dotfiles#$\(hostname\)";
@@ -78,7 +77,6 @@
       # lt = "ls -l | sort-by modified --reverse";
       # tree = "ls | tree";
       cdg = "cd (git rev-parse --show-toplevel)";
-      calc = "R --no-save -q";
       gst = "git status";
       hms = "home-manager switch --flake ~/.config/dotfiles#(hostname)";
       nxs = "sudo nixos-rebuild switch --flake ~/.config/dotfiles#(hostname)";
