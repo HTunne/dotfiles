@@ -52,7 +52,7 @@
       tree = "eza -l --tree --git";
       cdg = "cd $\(git rev-parse --show-toplevel\)";
       gst = "git status";
-      hms = "home-manager switch --flake ~/.config/dotfiles#$\(hostname\)";
+      hms = "home-manager switch --flake ~/.config/dotfiles#$\(hostname\) && home-manager news --flake ~/.config/dotfiles#$\(hostname\)";
       nxs = "sudo nixos-rebuild switch --flake ~/.config/dotfiles#$\(hostname\)";
     };
     shellOptions = [
@@ -78,7 +78,7 @@
       # tree = "ls | tree";
       cdg = "cd (git rev-parse --show-toplevel)";
       gst = "git status";
-      hms = "home-manager switch --flake ~/.config/dotfiles#(hostname)";
+      hms = "home-manager switch --flake ~/.config/dotfiles#(hostname) && home-manager news --flake ~/.config/dotfiles#(hostname)";
       nxs = "sudo nixos-rebuild switch --flake ~/.config/dotfiles#(hostname)";
     };
     configFile.text = ''
