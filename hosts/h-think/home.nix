@@ -98,7 +98,6 @@ in {
     gimp
     guvcview
     inkscape
-    kanshi
     python311Packages.kicad
     librecad
     libreoffice

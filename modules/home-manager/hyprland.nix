@@ -357,6 +357,7 @@ in {
       RestartSec = "30";
     };
   };
+
   systemd.user.services.waybar = {
     Unit = {
       Description = "Start waybar system bar.";
@@ -409,6 +410,34 @@ in {
         }
       ];
     };
+  };
+
+  services.kanshi = {
+    enable = true;
+    systemdTarget = "hyprland-session.target";
+    settings = [
+      {
+        profile.name = "undocked";
+        profile.outputs = [
+          {
+            criteria = "eDP-1";
+            scale = 1.0;
+          }
+        ];
+      }
+      {
+        profile.name = "docked";
+        profile.outputs = [
+          {
+            criteria = "eDP-1";
+            status = "disable";
+          }
+          {
+            criteria = "HDMI-A-2";
+          }
+        ];
+      }
+    ];
   };
 
   services.hypridle = {
