@@ -181,66 +181,69 @@ in {
   programs.firefox = {
     enable = true;
     profiles.h = {
-      bookmarks = [
-        {
-          name = "toolbar";
-          toolbar = true;
-          bookmarks = [
-            {
-              name = "";
-              url = "http://homeassistant.local:8123";
-            }
-            {
-              name = "";
-              url = "https://mail.proton.me";
-            }
-            {
-              name = "";
-              url = "https://mail.google.com";
-            }
-            {
-              name = "";
-              url = "https://calendar.google.com";
-            }
-            {
-              name = "";
-              url = "https://drive.google.com";
-            }
-            {
-              name = "";
-              url = "https://www.youtube.com/";
-            }
-            {
-              name = "";
-              url = "https://open.spotify.com";
-            }
-            {
-              name = "";
-              url = "https://web.whatsapp.com";
-            }
-            {
-              name = "";
-              url = "https://www.messenger.com";
-            }
-            {
-              name = "";
-              url = "https://www.facebook.com";
-            }
-            {
-              name = "";
-              url = "https://github.com";
-            }
-            {
-              name = "";
-              url = "https://gitlab.com";
-            }
-            {
-              name = "";
-              url = "https://monkeytype.com";
-            }
-          ];
-        }
-      ];
+      bookmarks = {
+        force = true;
+        settings = [
+          {
+            name = "toolbar";
+            toolbar = true;
+            bookmarks = [
+              {
+                name = "";
+                url = "http://homeassistant.local:8123";
+              }
+              {
+                name = "";
+                url = "https://mail.proton.me";
+              }
+              {
+                name = "";
+                url = "https://mail.google.com";
+              }
+              {
+                name = "";
+                url = "https://calendar.google.com";
+              }
+              {
+                name = "";
+                url = "https://drive.google.com";
+              }
+              {
+                name = "";
+                url = "https://www.youtube.com/";
+              }
+              {
+                name = "";
+                url = "https://open.spotify.com";
+              }
+              {
+                name = "";
+                url = "https://web.whatsapp.com";
+              }
+              {
+                name = "";
+                url = "https://www.messenger.com";
+              }
+              {
+                name = "";
+                url = "https://www.facebook.com";
+              }
+              {
+                name = "";
+                url = "https://github.com";
+              }
+              {
+                name = "";
+                url = "https://gitlab.com";
+              }
+              {
+                name = "";
+                url = "https://monkeytype.com";
+              }
+            ];
+          }
+        ];
+      };
       extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
         adnauseam
         darkreader
@@ -250,7 +253,7 @@ in {
         tridactyl
       ];
       search = {
-        default = "DuckDuckGo";
+        default = "ddg";
         force = true;
       };
     };
