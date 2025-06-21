@@ -56,7 +56,7 @@
         extraSpecialArgs = {inherit inputs;};
         modules = [
           ./hosts/h-think/home.nix
-          catppuccin.homeManagerModules.catppuccin
+          catppuccin.homeModules.catppuccin
           ./modules/home-manager/shell.nix
           ./modules/home-manager/wm-base.nix
           ./modules/home-manager/hyprland.nix
