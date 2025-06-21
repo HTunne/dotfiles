@@ -46,7 +46,7 @@ in {
     zip
 
     # Command line
-    pqiv
+    swayimg
     timewarrior
     wayout
     xorg.xlsclients

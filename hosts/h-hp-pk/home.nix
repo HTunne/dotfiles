@@ -50,7 +50,7 @@ in {
 
     # Command line
     diskonaut
-    pqiv
+    swayimg
     timewarrior
     wayout
     xorg.xlsclients
@@ -228,7 +228,7 @@ in {
   programs.bash = {
     enable = true;
     shellAliases = {
-      sxiv = "pqiv";
+      sxiv = "swayimg";
       jn = "pipenv run jupyter lab";
       idf = "source $HOME/src/espressif/esp-idf/export.sh";
     };
