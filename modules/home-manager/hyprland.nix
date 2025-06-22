@@ -62,6 +62,9 @@ in {
 
   wayland.windowManager.hyprland = {
     enable = true;
+    plugins = [
+      pkgs.hyprlandPlugins.hy3
+    ];
     settings = {
       "$mod" = "SUPER";
       bind =
@@ -88,14 +91,15 @@ in {
           "$mod, D, exec, bemenu-run -p run"
           "$mod SHIFT, D, exec, pass-menu"
           "$mod, F, fullscreen"
-          "$mod, H, movefocus, l"
-          "$mod SHIFT, H, movewindow, l"
-          "$mod, J, movefocus, d"
-          "$mod SHIFT, J, movewindow, d"
-          "$mod, K, movefocus, u"
-          "$mod SHIFT, K, movewindow, u"
-          "$mod, L, movefocus, r"
-          "$mod SHIFT, L, movewindow, r"
+          "$mod, G, hy3:makegroup, tab"
+          "$mod, H, hy3:movefocus, l"
+          "$mod SHIFT, H, hy3:movewindow, l"
+          "$mod, J, hy3:movefocus, d"
+          "$mod SHIFT, J, hy3:movewindow, d"
+          "$mod, K, hy3:movefocus, u"
+          "$mod SHIFT, K, hy3:movewindow, u"
+          "$mod, L, hy3:movefocus, r"
+          "$mod SHIFT, L, hy3:movewindow, r"
           "$mod, X, exec, timew start short break"
           "$mod SHIFT, X, exec, timew start long break"
           "$mod, C, exec, timew continue @2"
@@ -103,14 +107,14 @@ in {
           "$mod, F1, exec, killall .waybar-wrapped; waybar &"
           "$mod, F2, exec, networkmanager_dmenu"
           "$mod, F3, exec, monitormenu"
-          "$mod, LEFT, movefocus, l"
-          "$mod SHIFT, LEFT, movewindow, l"
-          "$mod, DOWN, movefocus, d"
-          "$mod SHIFT, DOWN, movewindow, d"
-          "$mod, UP, movefocus, u"
-          "$mod SHIFT, UP, movewindow, u"
-          "$mod, RIGHT, movefocus, r"
-          "$mod SHIFT, RIGHT, movewindow, r"
+          "$mod, LEFT, hy3:movefocus, l"
+          "$mod SHIFT, LEFT, hy3:movewindow, l"
+          "$mod, DOWN, hy3:movefocus, d"
+          "$mod SHIFT, DOWN, hy3:movewindow, d"
+          "$mod, UP, hy3:movefocus, u"
+          "$mod SHIFT, UP, hy3:movewindow, u"
+          "$mod, RIGHT, hy3:movefocus, r"
+          "$mod SHIFT, RIGHT, hy3:movewindow, r"
           "$mod, RETURN, exec, foot"
           "$mod SHIFT, RETURN, togglespecialworkspace, term"
           "$mod, SPACE, togglefloating,"
@@ -156,6 +160,7 @@ in {
         "SHIFT,XF86MonBrightnessDown, exec, brightnessctl s 0%"
       ];
       general = {
+        layout = "hy3";
         gaps_in = 0;
         gaps_out = 0;
         border_size = 1;
@@ -180,8 +185,25 @@ in {
         # "swaybg -c $mantleAlpha &"
       ];
       "debug:disable_logs" = false;
+      plugin = {
+        hy3 = {
+          tabs = {
+            height = 4;
+            padding = 0;
+            radius = 0;
+            border_width = 2;
+            render_text = false;
+            "col.active.border" = "$accent";
+            "col.focused.border" = "$surface0";
+            "col.inactive.border" = "$base";
+            "col.urgent.border" = "$red";
+            "col.locked.border" = "$yellow";
+          };
+        };
+      };
     };
   };
+
   programs.waybar = {
     enable = true;
     settings = {
