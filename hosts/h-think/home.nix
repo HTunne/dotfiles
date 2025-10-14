@@ -49,6 +49,7 @@ in {
     swayimg
     timewarrior
     wayout
+    yt-dlp
     xorg.xlsclients
 
     # NVIM
