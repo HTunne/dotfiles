@@ -40,6 +40,7 @@
   programs.bash = {
     enable = true;
     shellAliases = {
+      cat = "bat";
       more = "less";
       mnt = "udisksctl mount -b";
       umnt = "udisksctl unmount -b";
