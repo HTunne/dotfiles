@@ -69,17 +69,19 @@ in {
     lua-language-server
     selene
     stylua
+    # markdown
+    marksman
     # nix
     nixd
     alejandra
     # openscad
     openscad-lsp
     # python
-    python311Packages.python-lsp-server
-    python311Packages.flake8
+    # python311Packages.python-lsp-server
+    python313Packages.flake8
     yapf
     isort
-    python311Packages.vulture
+    python313Packages.vulture
     # typescript
     typescript-language-server
     # vue

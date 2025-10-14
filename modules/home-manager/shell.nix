@@ -237,6 +237,10 @@
     enable = true;
   };
 
+  programs.fzf.enable = true;
+
+  programs.git.delta.enable = true;
+
   programs.mcfly = {
     enable = true;
     enableBashIntegration = true;
