@@ -142,6 +142,8 @@
     setSocketVariable = true;
   };
 
+  virtualisation.vmware.host.enable = true;
+
   musnix.enable = true;
 
   # This value determines the NixOS release from which the default
