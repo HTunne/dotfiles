@@ -99,7 +99,7 @@ in {
     gimp
     guvcview
     inkscape
-    python311Packages.kicad
+    kicad
     librecad
     libreoffice
     openscad
