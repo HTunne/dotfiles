@@ -250,6 +250,12 @@
 
   programs.tealdeer.enable = true;
 
+  # programs.zellij = {
+  #   enable = true;
+  #   enableBashIntegration = true;
+  #   # enableNushellIntegration = true;
+  # };
+
   programs.zoxide = {
     enable = true;
     enableBashIntegration = true;

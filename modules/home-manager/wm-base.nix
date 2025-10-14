@@ -15,7 +15,6 @@ in {
     nerd-fonts.droid-sans-mono
     bemenu
     libnotify
-    swaybg
     imagemagick
     slurp
     grim
@@ -59,10 +58,10 @@ in {
 
     (writeShellApplication {
       name = "pass-menu";
-      runtimeInputs = [bemenu];
+      runtimeInputs = [fuzzel];
       text = ''
         pushd "$PASSWORD_STORE_DIR" || exit
-        password=$(fd --extension gpg | sed 's/\.gpg//' | bemenu -p pass "$@")
+        password=$(fd --extension gpg | sed 's/\.gpg//' | fuzzel -d)
         [[ -n $password ]] || exit
         pass show -c "$password" 2>/dev/null
         popd >/dev/null 2>&1
@@ -71,13 +70,14 @@ in {
 
     (writeShellApplication {
       name = "powermenu";
-      runtimeInputs = [bemenu];
+      runtimeInputs = [fuzzel];
       text = ''
-        choice=$(echo -e "Shutdown\nLogout\nReboot" | bemenu "$@" -p power)
-        case $choice in
+        choice=$(echo -e "󰐥 Shutdown\n󰗽 Logout\n󰜉 Reboot\n󰌾 Lock" | fuzzel -l4 -d)
+        case ''${choice#* } in
           Shutdown) poweroff;;
           Reboot) reboot;;
-          Logout) hyprctl dispatch exit 1;;
+          Logout) exit-session;;
+          Lock) lock;;
         esac
       '';
     })
@@ -117,6 +117,13 @@ in {
     };
   };
 
+  programs.fuzzel = {
+    enable = true;
+    settings = {
+      border.radius = 0;
+    };
+  };
+
   services.batsignal.enable = true;
 
   services.gammastep = {
@@ -147,7 +154,7 @@ in {
   xdg.configFile."networkmanager-dmenu/config.ini".text = ''
     [dmenu]
     compact=True
-    dmenu_command='bemenu'
+    dmenu_command='fuzzel'
     [editor]
     terminal='foot'
   '';

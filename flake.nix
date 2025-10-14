@@ -19,12 +19,14 @@
       url = "github:nix-community/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    niri = {url = "github:sodiboo/niri-flake";};
   };
 
   outputs = {
     self,
     nixpkgs,
     catppuccin,
+    niri,
     nixGL,
     ...
   } @ inputs: let
@@ -53,13 +55,17 @@
     homeConfigurations = {
       h-think = inputs.home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
-        extraSpecialArgs = {inherit inputs;};
+        extraSpecialArgs = {
+          inherit inputs;
+        };
         modules = [
           ./hosts/h-think/home.nix
           catppuccin.homeModules.catppuccin
+          niri.homeModules.niri
           ./modules/home-manager/shell.nix
           ./modules/home-manager/wm-base.nix
-          ./modules/home-manager/hyprland.nix
+          # ./modules/home-manager/hyprland.nix
+          ./modules/home-manager/niri.nix
         ];
       };
       h-hp-pk = inputs.home-manager.lib.homeManagerConfiguration {
@@ -71,9 +77,11 @@
         modules = [
           ./hosts/h-hp-pk/home.nix
           catppuccin.homeManagerModules.catppuccin
+          niri.homeModules.niri
           ./modules/home-manager/shell.nix
           ./modules/home-manager/wm-base.nix
-          ./modules/home-manager/hyprland.nix
+          # ./modules/home-manager/hyprland.nix
+          ./modules/home-manager/niri.nix
         ];
       };
     };

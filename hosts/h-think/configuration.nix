@@ -45,7 +45,7 @@
     enable = true;
     settings = rec {
       initial_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --time-format '%I:%M %p | %a • %h | %F' --cmd Hyprland";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --time-format '%I:%M %p | %a • %h | %F' --cmd niri-session";
         user = "h";
       };
       default_session = initial_session;
@@ -69,7 +69,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # jack.enable = true;
+    jack.enable = true;
   };
 
   # Enable xremap
@@ -80,7 +80,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.h = {
     isNormalUser = true;
-    extraGroups = ["wheel" "audio" "video" "dialout"];
+    extraGroups = ["networkmanager" "wheel" "audio" "video" "dialout"];
     packages = with pkgs; [
     ];
   };
@@ -103,6 +103,9 @@
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   programs.dconf.enable = true;
+
+  # Fix for wlogout icons
+  programs.gdk-pixbuf.modulePackages = [pkgs.librsvg];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

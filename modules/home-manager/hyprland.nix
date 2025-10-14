@@ -115,7 +115,7 @@ in {
           "$mod SHIFT, UP, hy3:movewindow, u"
           "$mod, RIGHT, hy3:movefocus, r"
           "$mod SHIFT, RIGHT, hy3:movewindow, r"
-          "$mod, RETURN, exec, foot"
+          "$mod, RETURN, exec, $TERMINAL"
           "$mod SHIFT, RETURN, togglespecialworkspace, term"
           "$mod, SPACE, togglefloating,"
           ", Print, exec, grim ~/pics/scrns/$(date -u +%Y-%m-%d-%H-%M-%S-%N).png"
@@ -138,9 +138,9 @@ in {
             10)
         );
       workspace = [
-        "special:term, on-created-empty:[float;size 80% 80%;opacity 0.9] foot"
-        "special:monitor, on-created-empty:[float;size 80% 80%;opacity 0.9] foot -e btm"
-        "special:calc, on-created-empty:[float;size 80% 80%;opacity 0.9] foot -e qalc"
+        "special:term, on-created-empty:[float;size 80% 80%;opacity 0.9] $TERMINAL"
+        "special:monitor, on-created-empty:[float;size 80% 80%;opacity 0.9] $TERMINAL -e btm"
+        "special:calc, on-created-empty:[float;size 80% 80%;opacity 0.9] $TERMINAL -e qalc"
         "special:audio, on-created-empty:[float;size 80% 80%;opacity 0.9] pwvucontrol"
       ];
       bindm = [
@@ -181,8 +181,6 @@ in {
         kb_options = "caps:escape";
       };
       exec-once = [
-        # "waybar & "
-        # "swaybg -c $mantleAlpha &"
       ];
       "debug:disable_logs" = false;
       plugin = {
@@ -204,167 +202,169 @@ in {
     };
   };
 
-  programs.waybar = {
-    enable = true;
-    settings = {
-      mainBar = {
-        layer = "top";
-        # output = ["eDP-1" "DP-2"];
-        position = "top";
-        modules-left = ["hyprland/workspaces"];
-        modules-center = ["hyprland/window"];
-        modules-right = ["custom/task" "network" "wireplumber" "backlight" "battery" "clock"];
-        "hyprland/workspaces" = {
-          format = "{icon}";
-          on-scroll-up = "hyprctl dispatch workspace e+1";
-          on-scroll-down = "hyprctl dispatch workspace e-1";
-        };
-        tray = {
-          icon-size = 21;
-          spacing = 1;
-        };
-        clock = {
-          timezone = "Europe/London";
-          tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-          format = " {:%H:%M   %Y-%m-%d}";
-        };
-        backlight = {
-          device = "intel_backlight";
-          format = "{icon} {percent}%";
-          format-icons = ["" "" "" "" "" "" "" "" ""];
-        };
-        battery = {
-          states = {
-            warning = 30;
-            critical = 15;
-          };
-          format = "{icon} {capacity}% ({time})";
-          format-icons = {
-            default = ["󰂎" "󱊡" "󱊢" "󱊣"];
-            charging = ["󰢟" "󱊤" "󱊥" "󱊦"];
-          };
-        };
-        wireplumber = {
-          format = "{icon}  {volume}%";
-          format-muted = "  MUTE";
-          on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
-          on-click-right = "pwvucontrol";
-          format-icons = ["" "" ""];
-        };
-        network = {
-          interface = "wlp0s20f3";
-          format = "{ifname}";
-          format-wifi = "  {essid} ({signalStrength}%)";
-          format-ethernet = "󰊗  {ipaddr}/{cidr}";
-          format-disconnected = "";
-          tooltip-format = "󰊗  {ifname} via {gwaddr}";
-          tooltip-format-wifi = "  {essid} ({signalStrength}%)";
-          tooltip-format-ethernet = "  {ifname}";
-          tooltip-format-disconnected = "Disconnected";
-          max-length = 50;
-        };
-        "custom/task" = {
-          exec = "~/.nix-profile/bin/timewarrior-bar";
-          restart-interval = 1;
-        };
-      };
-    };
-    style = ''
-      * {
-        font-family: DejaVuSansM Nerd Font;
-        font-size: 14px;
-        min-height: 0;
-      }
-
-      #waybar {
-        background: transparent;
-        color: @text;
-      }
-
-      #workspaces {
-        /* border-radius: 1rem; */
-        /* margin: 5px; */
-        /* background-color: @surface0; */
-        /* margin-left: 5px; */
-      }
-
-      #workspaces button {
-        color: @overlay1;
-        padding: 0.2rem;
-      }
-
-      #workspaces button.active {
-        font-weight: bold;
-        color: @green;
-        border-radius: 0px;
-      }
-
-      #workspaces button:hover {
-        color: @teal;
-        background: transparent;
-        border-radius: 0px;
-        border-color: transparent;
-        box-shadow: none;
-      }
-
-      #workspaces button.focused {
-        background-color: transparent;
-        box-shadow: none;
-      }
-
-      #workspaces button.urgent {
-        font-weight: bold;
-        color: @red;
-        background-color: transparent;
-      }
-
-      #tray,
-      #network,
-      #backlight,
-      #clock,
-      #battery,
-      #wireplumber {
-        margin: 0 0.5rem;
-        padding: 0.2rem 0.5rem;
-      }
-
-      #network {
-        color: @pink;
-        border-color: @pink;
-      }
-
-      #wireplumber {
-        color: @mauve;
-        border-color: @mauve;
-      }
-
-      #backlight {
-        color: @yellow;
-        border-color: @yellow;
-      }
-
-      #battery {
-        color: @peach;
-        border-color: @peach;
-      }
-
-      #battery.charging {
-        color: @green;
-        border-color: @green;
-      }
-
-      #battery.warning:not(.charging) {
-        color: @red;
-        border-color: @red;
-      }
-
-      #clock {
-        color: @blue;
-        border-color: @blue;
-      }
-    '';
-  };
-
+  # programs.waybar = {
+  #   enable = true;
+  #   systemd.enable = true;
+  #   systemd.target = "hyprland-session.target";
+  #   settings = {
+  #     mainBar = {
+  #       layer = "top";
+  #       # output = ["eDP-1" "DP-2"];
+  #       position = "top";
+  #       modules-left = ["hyprland/workspaces"];
+  #       modules-center = ["hyprland/window"];
+  #       modules-right = ["custom/task" "network" "wireplumber" "backlight" "battery" "clock"];
+  #       "hyprland/workspaces" = {
+  #         format = "{icon}";
+  #         on-scroll-up = "hyprctl dispatch workspace e+1";
+  #         on-scroll-down = "hyprctl dispatch workspace e-1";
+  #       };
+  #       tray = {
+  #         icon-size = 21;
+  #         spacing = 1;
+  #       };
+  #       clock = {
+  #         timezone = "Europe/London";
+  #         tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
+  #         format = " {:%H:%M   %Y-%m-%d}";
+  #       };
+  #       backlight = {
+  #         device = "intel_backlight";
+  #         format = "{icon} {percent}%";
+  #         format-icons = ["" "" "" "" "" "" "" "" ""];
+  #       };
+  #       battery = {
+  #         states = {
+  #           warning = 30;
+  #           critical = 15;
+  #         };
+  #         format = "{icon} {capacity}% ({time})";
+  #         format-icons = {
+  #           default = ["󰂎" "󱊡" "󱊢" "󱊣"];
+  #           charging = ["󰢟" "󱊤" "󱊥" "󱊦"];
+  #         };
+  #       };
+  #       wireplumber = {
+  #         format = "{icon}  {volume}%";
+  #         format-muted = "  MUTE";
+  #         on-click = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+  #         on-click-right = "pwvucontrol";
+  #         format-icons = ["" "" ""];
+  #       };
+  #       network = {
+  #         interface = "wlp0s20f3";
+  #         format = "{ifname}";
+  #         format-wifi = "  {essid} ({signalStrength}%)";
+  #         format-ethernet = "󰊗  {ipaddr}/{cidr}";
+  #         format-disconnected = "";
+  #         tooltip-format = "󰊗  {ifname} via {gwaddr}";
+  #         tooltip-format-wifi = "  {essid} ({signalStrength}%)";
+  #         tooltip-format-ethernet = "  {ifname}";
+  #         tooltip-format-disconnected = "Disconnected";
+  #         max-length = 50;
+  #       };
+  #       "custom/task" = {
+  #         exec = "~/.nix-profile/bin/timewarrior-bar";
+  #         restart-interval = 1;
+  #       };
+  #     };
+  #   };
+  #   style = ''
+  #     * {
+  #       font-family: DejaVuSansM Nerd Font;
+  #       font-size: 14px;
+  #       min-height: 0;
+  #     }
+  #
+  #     #waybar {
+  #       background: transparent;
+  #       color: @text;
+  #     }
+  #
+  #     #workspaces {
+  #       /* border-radius: 1rem; */
+  #       /* margin: 5px; */
+  #       /* background-color: @surface0; */
+  #       /* margin-left: 5px; */
+  #     }
+  #
+  #     #workspaces button {
+  #       color: @overlay1;
+  #       padding: 0.2rem;
+  #     }
+  #
+  #     #workspaces button.active {
+  #       font-weight: bold;
+  #       color: @green;
+  #       border-radius: 0px;
+  #     }
+  #
+  #     #workspaces button:hover {
+  #       color: @teal;
+  #       background: transparent;
+  #       border-radius: 0px;
+  #       border-color: transparent;
+  #       box-shadow: none;
+  #     }
+  #
+  #     #workspaces button.focused {
+  #       background-color: transparent;
+  #       box-shadow: none;
+  #     }
+  #
+  #     #workspaces button.urgent {
+  #       font-weight: bold;
+  #       color: @red;
+  #       background-color: transparent;
+  #     }
+  #
+  #     #tray,
+  #     #network,
+  #     #backlight,
+  #     #clock,
+  #     #battery,
+  #     #wireplumber {
+  #       margin: 0 0.5rem;
+  #       padding: 0.2rem 0.5rem;
+  #     }
+  #
+  #     #network {
+  #       color: @pink;
+  #       border-color: @pink;
+  #     }
+  #
+  #     #wireplumber {
+  #       color: @mauve;
+  #       border-color: @mauve;
+  #     }
+  #
+  #     #backlight {
+  #       color: @yellow;
+  #       border-color: @yellow;
+  #     }
+  #
+  #     #battery {
+  #       color: @peach;
+  #       border-color: @peach;
+  #     }
+  #
+  #     #battery.charging {
+  #       color: @green;
+  #       border-color: @green;
+  #     }
+  #
+  #     #battery.warning:not(.charging) {
+  #       color: @red;
+  #       border-color: @red;
+  #     }
+  #
+  #     #clock {
+  #       color: @blue;
+  #       border-color: @blue;
+  #     }
+  #   '';
+  # };
+  #
   systemd.user.services.swaybg = {
     Unit = {
       Description = "Start waybar system bar.";
@@ -380,43 +380,23 @@ in {
     };
   };
 
-  systemd.user.services.waybar = {
-    Unit = {
-      Description = "Start waybar system bar.";
-      BindsTo = "hyprland-session.target";
-    };
-    Install = {
-      WantedBy = ["hyprland-session.target"];
-    };
-    Service = {
-      ExecStart = "${pkgs.waybar}/bin/waybar";
-      Restart = "on-failure";
-      RestartSec = "30";
-    };
-  };
-
   programs.hyprlock = {
     enable = true;
     settings = {
       general = {
-        disable_loading_bar = true;
         grace = 10;
         hide_cursor = true;
-        no_fade_in = false;
       };
 
       background = [
         {
           color = "$base";
-          blur_passes = 3;
-          blur_size = 8;
         }
       ];
 
       input-field = [
         {
           position = "0, 0";
-          monitor = "";
           font_family = "${myfont} 10";
           dots_center = true;
           fade_on_empty = false;
@@ -427,8 +407,6 @@ in {
           fail_color = "rgba(0,0,0,0)";
           placeholder_text = "󰌾";
           fail_text = "󰣮";
-          fail_timeout = 0;
-          fail_transition = 0;
         }
       ];
     };

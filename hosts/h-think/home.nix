@@ -314,5 +314,6 @@ in {
     cursors.accent = "teal";
     nvim.enable = false;
     kvantum.enable = false;
+    hyprlock.useDefaultConfig = false;
   };
 }
