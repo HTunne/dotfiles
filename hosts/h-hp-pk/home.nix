@@ -227,6 +227,15 @@ in {
     };
   };
 
+  programs.niri = {
+    settings = {
+      binds = {
+        "Mod+B".action.spawn = "thunderbird";
+        "Mod+Shift+B".action.spawn = "slack";
+      };
+    };
+  };
+
   programs.bash = {
     enable = true;
     shellAliases = {
