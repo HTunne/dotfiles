@@ -280,7 +280,7 @@ in {
         "Mod+Space".action = toggle-window-floating;
         "Mod+Shift+Space".action = switch-focus-between-floating-and-tiling;
 
-        "Print".action.spawn-sh = "grim ~/pics/scrns/$(date -u +%Y-%m-%d-%H-%M-%S-%N).png";
+        "Print".action.spawn-sh = "FILENAME=~/pics/scrns/$(date -u +%Y-%m-%d-%H-%M-%S-%N).png && grim $FILENAME && notify-send \"Screenshot captured\" $FILENAME";
         "Shift+Print".action.spawn = "grimwarp";
       };
     };
