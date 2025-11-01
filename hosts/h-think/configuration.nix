@@ -41,18 +41,20 @@
 
   security.pam.services.hyprlock = {};
 
+  # services.displayManager.ly.enable = true;
+
   services.greetd = {
     enable = true;
     settings = rec {
       initial_session = {
-        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --time-format '%I:%M %p | %a • %h | %F' --cmd niri-session";
+        command = "${pkgs.tuigreet}/bin/tuigreet --time --time-format '%I:%M %p | %a • %h | %F' --cmd niri-session";
         user = "h";
       };
       default_session = initial_session;
     };
   };
   environment.etc."greetd/environments".text = ''
-    hyprland
+    niri
   '';
 
   services.udisks2.enable = true;
