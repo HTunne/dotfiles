@@ -49,7 +49,7 @@ in {
     zip
 
     # Command line
-    diskonaut
+    ncdu
     swayimg
     timewarrior
     wayout
@@ -78,15 +78,17 @@ in {
     # openscad
     openscad-lsp
     # python
-    python311Packages.python-lsp-server
-    python311Packages.flake8
+    python313Packages.python-lsp-server
+    python313Packages.flake8
     yapf
     isort
-    python311Packages.vulture
+    python313Packages.vulture
     # typescript
     typescript-language-server
     # vue
     vscode-extensions.vue.volar
+    # html
+    vscode-langservers-extracted
 
     tree-sitter
 
