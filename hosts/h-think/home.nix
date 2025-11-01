@@ -32,109 +32,123 @@ in {
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
-  home.packages = with pkgs; [
-    # Devtools
-    bear
-    cargo
-    commitizen
-    cmake
-    gcc
-    gnumake
-    nodejs
-    python3
-    unzip
-    zip
+  home.packages = let
+    typos-lsp = with pkgs;
+      rustPlatform.buildRustPackage rec {
+        pname = "typos-lsp";
+        version = "v0.1.45";
+        src = fetchFromGitHub {
+          owner = "tekumara";
+          repo = "typos-lsp";
+          rev = version;
+          hash = "sha256-Yyb2i3ymkxZGmyl3N7hcM2pWuJZRMxcWRNk283wdyy4=";
+        };
+        cargoHash = "sha256-FMKS49Uz7gwsXoa9VjVlMwUzZWUJ5D2kOYjQro9iNwE=";
+      };
+  in
+    # home.packages = with pkgs; [
+    with pkgs; [
+      typos-lsp
+      # Devtools
+      bear
+      cargo
+      commitizen
+      nodejs
+      python3
+      unzip
+      zip
 
-    # Command line
-    swayimg
-    timewarrior
-    wayout
-    yt-dlp
-    xorg.xlsclients
+      # Command line
+      swayimg
+      timewarrior
+      wayout
+      yt-dlp
+      xorg.xlsclients
 
-    # NVIM
-    # bash
-    nodePackages.bash-language-server
-    shfmt
-    # c/c++
-    clang-tools
-    # cmake
-    cmake-language-server
-    cmake-format
-    # js/ts
-    nodePackages.typescript-language-server
-    tailwindcss-language-server
-    prettierd
-    # lua
-    lua-language-server
-    selene
-    stylua
-    # markdown
-    marksman
-    # nix
-    nixd
-    alejandra
-    # openscad
-    openscad-lsp
-    # python
-    # python311Packages.python-lsp-server
-    python313Packages.flake8
-    yapf
-    isort
-    python313Packages.vulture
-    # typescript
-    typescript-language-server
-    # vue
-    vscode-extensions.vue.volar
+      # NVIM
+      # bash
+      nodePackages.bash-language-server
+      shfmt
+      # c/c++
+      clang-tools
+      # cmake
+      cmake-language-server
+      cmake-format
+      # js/ts
+      nodePackages.typescript-language-server
+      tailwindcss-language-server
+      prettierd
+      # lua
+      lua-language-server
+      selene
+      stylua
+      # markdown
+      markdown-oxide
+      # nix
+      nixd
+      alejandra
+      # openscad
+      openscad-lsp
+      # python
+      # python311Packages.python-lsp-server
+      python313Packages.flake8
+      yapf
+      isort
+      python313Packages.vulture
+      # typescript
+      typescript-language-server
+      # vue
+      vscode-extensions.vue.volar
 
-    tree-sitter
+      tree-sitter
 
-    # GUI
-    arduino
-    google-chrome
-    backintime
-    blueman
-    # cura
-    diylc
-    discord
-    freecad-wayland
-    gimp
-    guvcview
-    inkscape
-    kicad
-    librecad
-    libreoffice
-    openscad
-    pcmanfm
-    pinta
-    prusa-slicer
-    libsForQt5.qtstyleplugin-kvantum
-    steam
-    wdisplays
+      # GUI
+      arduino
+      google-chrome
+      backintime
+      blueman
+      # cura
+      diylc
+      discord
+      freecad-wayland
+      gimp
+      guvcview
+      inkscape
+      kicad
+      librecad
+      libreoffice
+      openscad
+      pcmanfm
+      pinta
+      prusa-slicer
+      libsForQt5.qtstyleplugin-kvantum
+      steam
+      veroroute
+      wdisplays
 
-    #audio
-    qpwgraph
-    ardour
-    audacity
-    AMB-plugins
-    bespokesynth
-    calf
-    cardinal
-    caps
-    bchoppr
-    dexed
-    # distrho
-    dragonfly-reverb
-    # helm
-    hydrogen
-    pwvucontrol
-    tap-plugins
-    vmpk
-    wolf-shaper
-    x42-avldrums
-    yoshimi
-    zam-plugins
-  ];
+      #audio
+      qpwgraph
+      ardour
+      audacity
+      AMB-plugins
+      bespokesynth
+      calf
+      cardinal
+      caps
+      bchoppr
+      dexed
+      # distrho
+      dragonfly-reverb
+      # helm
+      hydrogen
+      pwvucontrol
+      tap-plugins
+      vmpk
+      wolf-shaper
+      x42-avldrums
+      yoshimi
+      zam-plugins
+    ];
 
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
