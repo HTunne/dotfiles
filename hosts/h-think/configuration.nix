@@ -82,7 +82,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.h = {
     isNormalUser = true;
-    extraGroups = ["networkmanager" "wheel" "audio" "video" "dialout"];
+    extraGroups = ["networkmanager" "wheel" "audio" "video" "dialout" "docker"];
     packages = with pkgs; [
     ];
   };
