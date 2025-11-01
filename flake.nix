@@ -60,7 +60,7 @@
         };
         modules = [
           ./hosts/h-think/home.nix
-          catppuccin.homeModules.catppuccin
+          catppuccin.homeManagerModules.catppuccin
           niri.homeModules.niri
           ./modules/home-manager/shell.nix
           ./modules/home-manager/wm-base.nix
