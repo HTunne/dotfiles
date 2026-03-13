@@ -1,0 +1,350 @@
+{
+  inputs,
+  self,
+  ...
+}: {
+  flake.homeConfigurations.h-think = inputs.home-manager.lib.homeManagerConfiguration {
+    pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
+    modules = [
+      self.homeModules.h-think
+      self.homeModules.shell
+      self.homeModules.wm-base
+      inputs.catppuccin.homeModules.catppuccin
+      # self.homeModules.niri
+    ];
+  };
+
+  flake.homeModules.h-think = {config, pkgs, ...}: {
+    nixpkgs.overlays = [
+      inputs.neovim-nightly-overlay.overlays.default
+    ];
+
+    home.username = "h";
+    home.homeDirectory = "/home/h";
+
+    # This value determines the Home Manager release that your configuration is
+    # compatible with. This helps avoid breakage when a new Home Manager release
+    # introduces backwards incompatible changes.
+    #
+    # You should not change this value, even if you update Home Manager. If you do
+    # want to update the value, then make sure to first check the Home Manager
+    # release notes.
+    home.stateVersion = "23.05"; # Please read the comment before changing.
+
+    # The home.packages option allows you to install Nix packages into your
+    # environment.
+    home.packages = let
+      typos-lsp = with pkgs;
+        rustPlatform.buildRustPackage rec {
+          pname = "typos-lsp";
+          version = "v0.1.45";
+          src = fetchFromGitHub {
+            owner = "tekumara";
+            repo = "typos-lsp";
+            rev = version;
+            hash = "sha256-Yyb2i3ymkxZGmyl3N7hcM2pWuJZRMxcWRNk283wdyy4=";
+          };
+          cargoHash = "sha256-FMKS49Uz7gwsXoa9VjVlMwUzZWUJ5D2kOYjQro9iNwE=";
+        };
+    in
+      # home.packages = with pkgs; [
+      with pkgs; [
+        typos-lsp
+        # Devtools
+        bear
+        cargo
+        commitizen
+        nodejs
+        python3
+        unzip
+        zip
+
+        # Command line
+        swayimg
+        timewarrior
+        wayout
+        yt-dlp
+        xlsclients
+
+        # NVIM
+        # bash
+        nodePackages.bash-language-server
+        shfmt
+        # c/c++
+        clang-tools
+        # cmake
+        cmake-language-server
+        cmake-format
+        # js/ts
+        nodePackages.typescript-language-server
+        tailwindcss-language-server
+        prettierd
+        # lua
+        lua-language-server
+        selene
+        stylua
+        # markdown
+        markdown-oxide
+        # nix
+        nixd
+        alejandra
+        # openscad
+        openscad-lsp
+        # python
+        # python311Packages.python-lsp-server
+        python313Packages.flake8
+        yapf
+        isort
+        python313Packages.vulture
+        # typescript
+        typescript-language-server
+        # vue
+        vscode-extensions.vue.volar
+
+        tree-sitter
+
+        # GUI
+        arduino
+        google-chrome
+        backintime
+        blueman
+        # cura
+        # calibre
+        diylc
+        discord
+        freecad-wayland
+        gimp
+        guvcview
+        inkscape
+        kicad
+        librecad
+        libreoffice
+        openscad
+        pcmanfm
+        pika-backup
+        pinta
+        prusa-slicer
+        libsForQt5.qtstyleplugin-kvantum
+        steam
+        veroroute
+        wdisplays
+
+        #audio
+        qpwgraph
+        ardour
+        audacity
+        AMB-plugins
+        bespokesynth
+        calf
+        cardinal
+        caps
+        bchoppr
+        dexed
+        # distrho
+        dragonfly-reverb
+        # helm
+        hydrogen
+        pwvucontrol
+        tap-plugins
+        vmpk
+        wolf-shaper
+        x42-avldrums
+        yoshimi
+        zam-plugins
+      ];
+
+    nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
+
+    home.file = {};
+
+    home.sessionVariables = {
+      TERMINAL = "foot";
+      VISUAL = "nvim";
+      BROWSER = "firefox";
+    };
+
+    gtk = {
+      enable = true;
+      font.name = "DejaVuSansM Nerd Font 14";
+    };
+
+    qt = {
+      enable = true;
+      style.name = "kvantum";
+      platformTheme.name = "kvantum";
+    };
+
+    programs.alacritty = {
+      enable = true;
+      settings = {
+        font = {
+          normal = "DejaVuSansM Nerd Font Mono";
+          size = 10;
+        };
+      };
+      # settings.shell.program = "${pkgs.nushell}/bin/nu";
+    };
+
+    programs.foot = {
+      enable = true;
+      server.enable = true;
+      settings = {
+        main = {
+          font = "DejaVuSansM Nerd Font Mono:size=10";
+        };
+
+        mouse = {
+          hide-when-typing = "yes";
+        };
+      };
+    };
+
+    programs.browserpass = {
+      enable = true;
+      browsers = ["firefox"];
+    };
+
+    programs.firefox = {
+      enable = true;
+      profiles.h = {
+        bookmarks = {
+          force = true;
+          settings = [
+            {
+              name = "toolbar";
+              toolbar = true;
+              bookmarks = [
+                {
+                  name = "";
+                  url = "http://homeassistant.local:8123";
+                }
+                {
+                  name = "";
+                  url = "https://mail.proton.me";
+                }
+                {
+                  name = "";
+                  url = "https://mail.google.com";
+                }
+                {
+                  name = "";
+                  url = "https://calendar.google.com";
+                }
+                {
+                  name = "";
+                  url = "https://drive.google.com";
+                }
+                {
+                  name = "";
+                  url = "https://www.youtube.com/";
+                }
+                {
+                  name = "";
+                  url = "https://open.spotify.com";
+                }
+                {
+                  name = "";
+                  url = "https://web.whatsapp.com";
+                }
+                {
+                  name = "";
+                  url = "https://www.messenger.com";
+                }
+                {
+                  name = "";
+                  url = "https://www.facebook.com";
+                }
+                {
+                  name = "";
+                  url = "https://github.com";
+                }
+                {
+                  name = "";
+                  url = "https://gitlab.com";
+                }
+                {
+                  name = "";
+                  url = "https://monkeytype.com";
+                }
+              ];
+            }
+          ];
+        };
+        extensions.packages = with inputs.firefox-addons.packages."x86_64-linux"; [
+          adnauseam
+          darkreader
+          duckduckgo-privacy-essentials
+          firefox-color
+          passff
+          tridactyl
+        ];
+        extensions.force = true;
+        search = {
+          default = "ddg";
+          force = true;
+        };
+      };
+    };
+
+    programs.git = {
+      enable = true;
+      lfs.enable = true;
+      settings = {
+        user.name = "HTunne";
+        user.email = "hazzatun@gmail.com";
+      };
+    };
+
+    programs.home-manager.enable = true;
+
+    programs.mpv.enable = true;
+
+    programs.neovim = {
+      enable = true;
+      defaultEditor = true;
+    };
+
+    programs.password-store.enable = true;
+
+    programs.ssh = {
+      enable = true;
+      enableDefaultConfig = true;
+    };
+
+    programs.taskwarrior = {
+      enable = true;
+      config = {
+        hooks.location = "${config.home.homeDirectory}/.config/task/hooks";
+      };
+    };
+
+    programs.zathura.enable = true;
+
+    xdg.configFile = {
+      nvim.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/dotfiles/nvim";
+    };
+
+    xdg.userDirs = {
+      enable = true;
+      createDirectories = true;
+      desktop = "$HOME/desk";
+      documents = "$HOME/docs";
+      download = "$HOME/dwns";
+      music = "$HOME/mus";
+      pictures = "$HOME/pics";
+      publicShare = "$HOME/pub";
+      templates = "$HOME/temp";
+      videos = "$HOME/vids";
+    };
+
+    catppuccin = {
+      enable = true;
+      flavor = "mocha";
+      cursors.enable = true;
+      cursors.accent = "teal";
+      nvim.enable = false;
+      kvantum.enable = false;
+      hyprlock.useDefaultConfig = false;
+    };
+  };
+}
