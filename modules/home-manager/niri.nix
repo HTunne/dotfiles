@@ -78,8 +78,8 @@ in {
         gaps = 2;
         background-color = "${palette.mantle.hex}";
         preset-column-widths = [
-        {proportion = 0.495;}
-        {proportion = 0.99;}
+          {proportion = 0.495;}
+          {proportion = 0.99;}
           # {proportion = 1. / 3.;}
           # {proportion = 1. / 2.;}
           # {proportion = 2. / 3.;}
@@ -287,7 +287,7 @@ in {
   };
 
   programs.waybar = {
-    enable = true;
+    enable = false;
     systemd.enable = true;
     systemd.target = "graphical-session.target";
     settings = {
@@ -554,6 +554,7 @@ in {
           {
             criteria = "eDP-1";
             scale = 1.0;
+            status = "enable";
           }
         ];
       }
@@ -565,7 +566,8 @@ in {
             status = "disable";
           }
           {
-            criteria = "HDMI-A-2";
+            criteria = "DP-2";
+            status = "enable";
           }
         ];
       }
@@ -579,16 +581,10 @@ in {
   services.swayidle = {
     enable = true;
     systemdTarget = "graphical-session.target";
-    events = [
-      {
-        event = "before-sleep";
-        command = "${pkgs.systemd}/bin/loginctl lock-session";
-      }
-      {
-        event = "lock";
-        command = "pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
-      }
-    ];
+    events = {
+      "before-sleep" = "${pkgs.systemd}/bin/loginctl lock-session";
+      "lock" = "pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
+    };
     timeouts = [
       {
         timeout = 300;

@@ -63,7 +63,7 @@ in {
       timewarrior
       wayout
       yt-dlp
-      xorg.xlsclients
+      xlsclients
 
       # NVIM
       # bash
@@ -108,6 +108,7 @@ in {
       backintime
       blueman
       # cura
+      # calibre
       diylc
       discord
       freecad-wayland
@@ -119,6 +120,7 @@ in {
       libreoffice
       openscad
       pcmanfm
+      pika-backup
       pinta
       prusa-slicer
       libsForQt5.qtstyleplugin-kvantum
@@ -173,7 +175,13 @@ in {
 
   programs.alacritty = {
     enable = true;
-    settings.shell.program = "${pkgs.nushell}/bin/nu";
+    settings = {
+      font = {
+        normal = "DejaVuSansM Nerd Font Mono";
+        size = 10;
+      };
+    };
+    # settings.shell.program = "${pkgs.nushell}/bin/nu";
   };
 
   programs.foot = {
@@ -269,6 +277,7 @@ in {
         passff
         tridactyl
       ];
+      extensions.force = true;
       search = {
         default = "ddg";
         force = true;
@@ -279,8 +288,10 @@ in {
   programs.git = {
     enable = true;
     lfs.enable = true;
-    userName = "HTunne";
-    userEmail = "hazzatun@gmail.com";
+    settings = {
+      user.name = "HTunne";
+      user.email = "hazzatun@gmail.com";
+    };
   };
 
   programs.home-manager.enable = true;
@@ -296,6 +307,7 @@ in {
 
   programs.ssh = {
     enable = true;
+    enableDefaultConfig = true;
   };
 
   programs.taskwarrior = {

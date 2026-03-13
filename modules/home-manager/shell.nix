@@ -240,7 +240,7 @@
 
   programs.fzf.enable = true;
 
-  programs.git.delta.enable = true;
+  programs.delta.enable = true;
 
   programs.mcfly = {
     enable = true;

@@ -124,7 +124,16 @@ in {
     };
   };
 
+  programs.quickshell = {
+    enable = true;
+  };
+
   services.batsignal.enable = true;
+
+  services.clipmenu = {
+    enable = true;
+    launcher = "fuzzel -d";
+  };
 
   services.gammastep = {
     enable = true;
@@ -140,7 +149,7 @@ in {
   services.unclutter.enable = true;
 
   services.dunst = {
-    enable = true;
+    enable = false;
     settings = {
       global = {
         separator_color = "frame";

@@ -20,6 +20,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri = {url = "github:sodiboo/niri-flake";};
+
+    quickshell = {
+      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    qml-niri = {
+      url = "github:imiric/qml-niri/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.quickshell.follows = "quickshell";
+    };
   };
 
   outputs = {
@@ -28,6 +39,7 @@
     catppuccin,
     niri,
     nixGL,
+    qml-niri,
     ...
   } @ inputs: let
     system = "x86_64-linux";
@@ -37,13 +49,26 @@
       config.nvidia.acceptLicense = true;
       overlays = [
         inputs.neovim-nightly-overlay.overlays.default
+        (final: prev: {
+          quickshell = qml-niri.packages.${system}.quickshell;
+        })
       ];
     };
+    systems = [
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
+    # This is a function that generates an attribute by calling a function you
+    # pass to it, with each system as an argument
+    forAllSystems = nixpkgs.lib.genAttrs systems;
   in {
     nixosConfigurations = {
       h-think = nixpkgs.lib.nixosSystem {
         inherit pkgs system;
-        specialArgs = {inherit system inputs pkgs;};
+        specialArgs = {inherit system inputs;};
         modules = [
           inputs.musnix.nixosModules.musnix
           ./hosts/h-think/configuration.nix
@@ -60,7 +85,7 @@
         };
         modules = [
           ./hosts/h-think/home.nix
-          catppuccin.homeManagerModules.catppuccin
+          catppuccin.homeModules.catppuccin
           niri.homeModules.niri
           ./modules/home-manager/shell.nix
           ./modules/home-manager/wm-base.nix
@@ -76,12 +101,12 @@
         };
         modules = [
           ./hosts/h-hp-pk/home.nix
-          catppuccin.homeManagerModules.catppuccin
+          catppuccin.homeModules.catppuccin
           niri.homeModules.niri
           ./modules/home-manager/shell.nix
           ./modules/home-manager/wm-base.nix
-          # ./modules/home-manager/hyprland.nix
-          ./modules/home-manager/niri.nix
+          ./modules/home-manager/hyprland.nix
+          # ./modules/home-manager/niri.nix
         ];
       };
     };

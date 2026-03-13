@@ -91,13 +91,13 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     git
-    glxinfo
     lshw
+    mesa-demos
     psmisc
     pciutils
     brightnessctl
     gparted
-    greetd.tuigreet
+    tuigreet
   ];
 
   # services.xserver.windowManager.qtile.enable = true;
@@ -137,6 +137,8 @@
   services.avahi.enable = true;
 
   services.resolved.enable = true;
+
+  services.system76-scheduler.enable = true;
 
   virtualisation.docker.enable = true;
   virtualisation.docker.rootless = {
