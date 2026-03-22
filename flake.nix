@@ -2,6 +2,8 @@
   description = "My NixOs configuration";
 
   inputs = {
+    self.submodules = true;
+
     nixpkgs.url = "nixpkgs/nixos-unstable";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
@@ -9,7 +11,10 @@
     };
     import-tree = {
       url = "github:vic/import-tree";
-      inputs.nixpkgs-lib.follows = "nixpkgs";
+    };
+    wrappers = {
+      url = "github:BirdeeHub/nix-wrapper-modules";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     home-manager = {
       url = "github:nix-community/home-manager";

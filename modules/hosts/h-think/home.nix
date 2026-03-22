@@ -10,14 +10,11 @@
       self.homeModules.shell
       self.homeModules.wm-base
       inputs.catppuccin.homeModules.catppuccin
-      # self.homeModules.niri
+      self.homeModules.neovim
     ];
   };
 
   flake.homeModules.h-think = {config, pkgs, ...}: {
-    nixpkgs.overlays = [
-      inputs.neovim-nightly-overlay.overlays.default
-    ];
 
     home.username = "h";
     home.homeDirectory = "/home/h";
@@ -65,43 +62,6 @@
         wayout
         yt-dlp
         xlsclients
-
-        # NVIM
-        # bash
-        nodePackages.bash-language-server
-        shfmt
-        # c/c++
-        clang-tools
-        # cmake
-        cmake-language-server
-        cmake-format
-        # js/ts
-        nodePackages.typescript-language-server
-        tailwindcss-language-server
-        prettierd
-        # lua
-        lua-language-server
-        selene
-        stylua
-        # markdown
-        markdown-oxide
-        # nix
-        nixd
-        alejandra
-        # openscad
-        openscad-lsp
-        # python
-        # python311Packages.python-lsp-server
-        python313Packages.flake8
-        yapf
-        isort
-        python313Packages.vulture
-        # typescript
-        typescript-language-server
-        # vue
-        vscode-extensions.vue.volar
-
-        tree-sitter
 
         # GUI
         arduino
@@ -299,10 +259,7 @@
 
     programs.mpv.enable = true;
 
-    programs.neovim = {
-      enable = true;
-      defaultEditor = true;
-    };
+    wrappers.neovim.enable = true;
 
     programs.password-store.enable = true;
 
@@ -319,10 +276,6 @@
     };
 
     programs.zathura.enable = true;
-
-    xdg.configFile = {
-      nvim.source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/dotfiles/nvim";
-    };
 
     xdg.userDirs = {
       enable = true;
