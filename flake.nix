@@ -32,7 +32,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+    neovim = {
+      url = "github:HTunne/nvim-config";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     niri = {url = "github:sodiboo/niri-flake";};
     quickshell = {
       url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
