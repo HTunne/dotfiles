@@ -1,9 +1,8 @@
-{
+{inputs, ...}: {
   flake.homeModules.niri = {
     config,
     pkgs,
     lib,
-    inputs,
     ...
   }: let
     inherit (config.catppuccin) sources;
@@ -288,7 +287,7 @@
     };
 
     programs.waybar = {
-      enable = false;
+      enable = true;
       systemd.enable = true;
       systemd.target = "graphical-session.target";
       settings = {
