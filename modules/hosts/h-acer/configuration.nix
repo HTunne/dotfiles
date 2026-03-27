@@ -7,11 +7,11 @@
     modules = [
       self.nixosModules.h-acer
       inputs.neovim.nixosModules.neovim
+      self.nixosModules.homelab
     ];
   };
 
   flake.nixosModules.h-acer = {pkgs, ...}: {
-
     wrappers.neovim.enable = true;
 
     nixpkgs.overlays = [
@@ -34,46 +34,11 @@
       })
     ];
 
-    services.deluge = {
-      enable = true;
-    };
-
-    services.slskd = {
-      enable = false;
-    };
-
-    services.jellyfin = {
-    user = "h";
-      enable = true;
-      openFirewall = true;
-    };
-
-    services.jellyseerr = {
-      enable = true;
-    };
-
-    services.sonarr = {
-      enable = true;
-    };
-
-    services.radarr = {
-      enable = true;
-    };
-
-    services.readarr = {
-      enable = true;
-    };
-
-    services.bazarr = {
-      enable = true;
-    };
-
-    services.lidarr = {
-      enable = true;
-    };
-
-    services.audiobookshelf = {
-      enable = true;
+    homelab.services = {
+      jellyfin.enable = true;
+      audiobookshelf.enable = true;
+      arr.enable = true;
+      deluge.enable = true;
     };
 
     # sabnzbd?
@@ -135,7 +100,7 @@
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     environment.systemPackages = with pkgs; [
-    	makemkv
+      makemkv
     ];
 
     # Some programs need SUID wrappers, can be configured further or are
