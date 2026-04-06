@@ -6,6 +6,7 @@
   flake.nixosConfigurations.h-acer = inputs.nixpkgs.lib.nixosSystem {
     modules = [
       self.nixosModules.h-acer
+      inputs.sops-nix.nixosModules.sops
       inputs.neovim.nixosModules.neovim
       self.nixosModules.homelab
     ];
@@ -34,9 +35,24 @@
       })
     ];
 
+    sops = {
+      defaultSopsFile = ./secrets.yaml;
+      age.keyFile = "/var/lib/sops-nix/key.txt";
+
+      secrets."wireguard/private_key" = {
+        owner = "root";
+        mode = "0400";
+      };
+      secrets."deluge/auth" = {
+        owner = "root";
+        mode = "0400";
+      };
+    };
+
+    homelab.user.enable = true;
     homelab.services = {
       jellyfin.enable = true;
-      audiobookshelf.enable = true;
+      audiobookshelf.enable = false;
       arr.enable = true;
       deluge.enable = true;
     };
@@ -101,6 +117,12 @@
     # $ nix search wget
     environment.systemPackages = with pkgs; [
       makemkv
+      wireguard-tools # for `wg show`
+      iproute2 # for `ip netns exec`
+      socat # for the web UI proxy
+      gawk
+      tcpdump
+      ripgrep
     ];
 
     # Some programs need SUID wrappers, can be configured further or are

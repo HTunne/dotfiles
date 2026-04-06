@@ -10,40 +10,49 @@
       };
     };
     config = lib.mkIf config.homelab.services.arr.enable {
+      services.prowlarr = {
+        enable = true;
+        openFirewall = true;
+      };
+
       services.sonarr = {
         enable = true;
-        user = config.homelab.user;
-        group = config.homelab.group;
+        openFirewall = true;
+        user = config.homelab.user.user;
+        group = config.homelab.user.group;
       };
 
       services.radarr = {
         enable = true;
-        user = config.homelab.user;
-        group = config.homelab.group;
+        openFirewall = true;
+        user = config.homelab.user.user;
+        group = config.homelab.user.group;
       };
 
       services.readarr = {
         enable = true;
-        user = config.homelab.user;
-        group = config.homelab.group;
+        openFirewall = true;
+        user = config.homelab.user.user;
+        group = config.homelab.user.group;
       };
 
       services.bazarr = {
         enable = true;
-        user = config.homelab.user;
-        group = config.homelab.group;
+        openFirewall = true;
+        user = config.homelab.user.user;
+        group = config.homelab.user.group;
       };
 
       services.lidarr = {
         enable = true;
-        user = config.homelab.user;
-        group = config.homelab.group;
+        openFirewall = true;
+        user = config.homelab.user.user;
+        group = config.homelab.user.group;
       };
 
-      services.jellyseer = {
+      services.seerr = {
         enable = true;
-        user = config.homelab.user;
-        group = config.homelab.group;
+        openFirewall = true;
       };
     };
   };

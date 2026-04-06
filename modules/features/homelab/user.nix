@@ -4,7 +4,10 @@
     config,
     ...
   }: {
-    options.homelab = {
+    options.homelab.user = {
+      enable = lib.mkEnableOption {
+        description = "Whether to enable homelab user";
+      };
       user = lib.mkOption {
         default = "share";
         type = lib.types.str;
@@ -20,15 +23,15 @@
         '';
       };
     };
-    config = lib.mkIf config.homelab.enable {
+    config = lib.mkIf config.homelab.user.enable {
       users = {
-        groups.${config.homelab.group} = {
-          gid = 993;
+        groups.${config.homelab.user.group} = {
+          gid = 992;
         };
-        users.${config.homelab.user} = {
+        users.${config.homelab.user.user} = {
           uid = 994;
           isSystemUser = true;
-          group = config.homelab.group;
+          group = config.homelab.user.group;
         };
       };
     };

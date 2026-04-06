@@ -1,0 +1,11 @@
+# .sops.yaml
+keys:
+  - &h-acer age12n9c8szwktgwn2a69qxcwadlschdz3kf8lemk873y80ae60ftsnsl87hu7
+
+    # paste the age public key from step 2 here
+
+creation_rules:
+  - path_regex: .*\.yaml$
+    key_groups:
+      - age:
+          - *h-acer
