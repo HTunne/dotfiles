@@ -7,15 +7,17 @@
     pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
     modules = [
       self.homeModules.h-think
-      self.homeModules.shell
       self.homeModules.wm-base
       inputs.catppuccin.homeModules.catppuccin
       self.homeModules.neovim
     ];
   };
 
-  flake.homeModules.h-think = {config, pkgs, ...}: {
-
+  flake.homeModules.h-think = {
+    config,
+    pkgs,
+    ...
+  }: {
     home.username = "h";
     home.homeDirectory = "/home/h";
 
@@ -30,88 +32,42 @@
 
     # The home.packages option allows you to install Nix packages into your
     # environment.
-    home.packages = let
-      typos-lsp = with pkgs;
-        rustPlatform.buildRustPackage rec {
-          pname = "typos-lsp";
-          version = "v0.1.45";
-          src = fetchFromGitHub {
-            owner = "tekumara";
-            repo = "typos-lsp";
-            rev = version;
-            hash = "sha256-Yyb2i3ymkxZGmyl3N7hcM2pWuJZRMxcWRNk283wdyy4=";
-          };
-          cargoHash = "sha256-FMKS49Uz7gwsXoa9VjVlMwUzZWUJ5D2kOYjQro9iNwE=";
-        };
-    in
-      # home.packages = with pkgs; [
-      with pkgs; [
-        typos-lsp
-        # Devtools
-        bear
-        cargo
-        commitizen
-        nodejs
-        python3
-        unzip
-        zip
+    home.packages = with pkgs; [
+      # Devtools
+      cargo
 
-        # Command line
-        swayimg
-        timewarrior
-        wayout
-        yt-dlp
-        xlsclients
+      # Command line
+      imv
+      timewarrior
+      yt-dlp
+      xlsclients
 
-        # GUI
-        arduino
-        google-chrome
-        backintime
-        blueman
-        # cura
-        # calibre
-        diylc
-        discord
-        freecad-wayland
-        gimp
-        guvcview
-        inkscape
-        kicad
-        librecad
-        libreoffice
-        openscad
-        pcmanfm
-        pika-backup
-        pinta
-        prusa-slicer
-        libsForQt5.qtstyleplugin-kvantum
-        steam
-        veroroute
-        wdisplays
-
-        #audio
-        qpwgraph
-        ardour
-        audacity
-        AMB-plugins
-        bespokesynth
-        calf
-        cardinal
-        caps
-        bchoppr
-        dexed
-        # distrho
-        dragonfly-reverb
-        # helm
-        hydrogen
-        pwvucontrol
-        tap-plugins
-        vmpk
-        wolf-shaper
-        x42-avldrums
-        yoshimi
-        zam-plugins
-      ];
+      # GUI
+      arduino
+      # google-chrome
+      backintime
+      blueman
+      # cura
+      # calibre
+      diylc
+      discord
+      freecad-wayland
+      gimp
+      guvcview
+      inkscape
+      kicad
+      librecad
+      libreoffice
+      openscad
+      pcmanfm
+      pika-backup
+      pinta
+      prusa-slicer
+      libsForQt5.qtstyleplugin-kvantum
+      steam
+      veroroute
+      wdisplays
+    ];
 
     nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
@@ -259,13 +215,11 @@
 
     programs.mpv.enable = true;
 
-    wrappers.neovim.enable = true;
 
     programs.password-store.enable = true;
 
     programs.ssh = {
       enable = true;
-      enableDefaultConfig = true;
     };
 
     programs.taskwarrior = {

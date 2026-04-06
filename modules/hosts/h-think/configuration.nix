@@ -78,17 +78,12 @@
       jack.enable = true;
     };
 
-    # Enable xremap
-    hardware.uinput.enable = true;
-    users.groups.uinput.members = ["h"];
-    users.groups.input.members = ["h"];
+    users.defaultUserShell = self.packages.${pkgs.stdenv.hostPlatform.system}.zsh;
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.h = {
       isNormalUser = true;
       extraGroups = ["networkmanager" "wheel" "audio" "video" "dialout" "docker"];
-      packages = with pkgs; [
-      ];
     };
 
     # List packages installed in system profile. To search, run:
