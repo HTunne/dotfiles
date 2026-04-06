@@ -4,12 +4,12 @@
   ...
 }: {
   flake.homeConfigurations.h-think = inputs.home-manager.lib.homeManagerConfiguration {
-    pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
+    pkgs = import inputs.nixpkgs {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+    };
     modules = [
       self.homeModules.h-think
-      self.homeModules.wm-base
-      inputs.catppuccin.homeModules.catppuccin
-      self.homeModules.neovim
     ];
   };
 
@@ -18,9 +18,14 @@
     pkgs,
     ...
   }: {
-    home.username = "h";
-    home.homeDirectory = "/home/h";
-
+    imports = [
+      inputs.catppuccin.homeModules.catppuccin
+      inputs.niri.homeModules.niri
+      self.homeModules.user
+      self.homeModules.wm-base
+      self.homeModules.niri
+      self.homeModules.cad
+    ];
     # This value determines the Home Manager release that your configuration is
     # compatible with. This helps avoid breakage when a new Home Manager release
     # introduces backwards incompatible changes.
@@ -33,9 +38,6 @@
     # The home.packages option allows you to install Nix packages into your
     # environment.
     home.packages = with pkgs; [
-      # Devtools
-      cargo
-
       # Command line
       imv
       timewarrior
@@ -47,25 +49,18 @@
       # google-chrome
       backintime
       blueman
-      # cura
       # calibre
-      diylc
       discord
-      freecad-wayland
       gimp
       guvcview
       inkscape
-      kicad
-      librecad
       libreoffice
       openscad
       pcmanfm
       pika-backup
       pinta
-      prusa-slicer
       libsForQt5.qtstyleplugin-kvantum
       steam
-      veroroute
       wdisplays
     ];
 

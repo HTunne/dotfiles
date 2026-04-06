@@ -7,12 +7,6 @@
     pkgs = import inputs.nixpkgs {system = "x86_64-linux";};
     modules = [
       self.homeModules.h-hp-pk
-      self.homeModules.shell
-      self.homeModules.wm-base
-      inputs.catppuccin.homeModules.catppuccin
-      inputs.niri.homeModules.niri
-      self.homeModules.niri
-      inputs.neovim.homeModules.neovim
     ];
   };
 
@@ -21,10 +15,14 @@
     pkgs,
     ...
   }: {
-    # Home Manager needs a bit of information about you and the paths it should
-    # manage.
-    home.username = "h";
-    home.homeDirectory = "/home/h";
+    imports = [
+      inputs.catppuccin.homeModules.catppuccin
+      inputs.niri.homeModules.niri
+      self.homeModules.user
+      self.homeModules.wm-base
+      self.homeModules.cad
+      self.homeModules.niri
+    ];
 
     # This value determines the Home Manager release that your configuration is
     # compatible with. This helps avoid breakage when a new Home Manager release
@@ -38,15 +36,8 @@
     # The home.packages option allows you to install Nix packages into your
     # environment.
     home.packages = with pkgs; [
-      # Devtools
-      bear
-      cargo
-      commitizen
-      unzip
-      zip
+      self.packages.${pkgs.stdenv.hostPlatform.system}.zsh
 
-      # Command line
-      ncdu
       imv
       timewarrior
       wayout
@@ -56,21 +47,13 @@
       google-chrome
       backintime
       blueman
-      # cura
-      diylc
-      freecad-wayland
       gimp
       guvcview
       inkscape
-      kicad
-      librecad
       libreoffice
-      openscad
       pcmanfm
       pinta
-      prusa-slicer
       libsForQt5.qtstyleplugin-kvantum
-      wdisplays
 
       #audio
       audacity
@@ -133,16 +116,6 @@
     programs.home-manager.enable = true;
 
     programs.mpv.enable = true;
-
-    wrappers.neovim.enable = true;
-    wrappers.neovim.settings.dev_mode = true;
-
-    programs.neovim = {
-      enable = true;
-      viAlias = true;
-      vimAlias = true;
-      defaultEditor = true;
-    };
 
     programs.password-store.enable = true;
 

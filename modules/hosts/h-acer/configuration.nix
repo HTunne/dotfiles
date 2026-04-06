@@ -6,15 +6,16 @@
   flake.nixosConfigurations.h-acer = inputs.nixpkgs.lib.nixosSystem {
     modules = [
       self.nixosModules.h-acer
-      inputs.sops-nix.nixosModules.sops
-      inputs.neovim.nixosModules.neovim
-      self.nixosModules.homelab
-      self.nixosModules.base
     ];
   };
 
   flake.nixosModules.h-acer = {pkgs, ...}: {
-    wrappers.neovim.enable = true;
+    imports = [
+      inputs.sops-nix.nixosModules.sops
+      self.nixosModules.base
+      self.nixosModules.user
+      self.nixosModules.homelab
+    ];
 
     nixpkgs.overlays = [
       (_final: prev: {
@@ -103,14 +104,6 @@
     # Configure console keymap
     console.keyMap = "uk";
 
-    # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.defaultUserShell = self.packages.${pkgs.stdenv.hostPlatform.system}.zsh;
-    users.users.h = {
-      isNormalUser = true;
-      description = "h";
-      extraGroups = ["networkmanager" "wheel" "optical"];
-    };
-
     # List packages installed in system profile. To search, run:
     # $ nix search wget
     environment.systemPackages = with pkgs; [
@@ -125,7 +118,6 @@
 
     # Some programs need SUID wrappers, can be configured further or are
     # started in user sessions.
-    programs.neovim.enable = true;
     programs.gnupg.agent = {
       enable = true;
       enableSSHSupport = true;

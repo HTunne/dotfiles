@@ -11,11 +11,11 @@
 
   flake.nixosModules.h-think = {pkgs, ...}: {
     imports = [
+      inputs.catppuccin.nixosModules.catppuccin
       self.nixosModules.base
+      self.nixosModules.user
       self.nixosModules.battery
       self.nixosModules.proaudio
-      inputs.catppuccin.nixosModules.catppuccin
-      inputs.neovim.nixosModules.neovim
     ];
 
     # Use the systemd-boot EFI boot loader.
@@ -78,14 +78,6 @@
       alsa.support32Bit = true;
       pulse.enable = true;
       jack.enable = true;
-    };
-
-    users.defaultUserShell = self.packages.${pkgs.stdenv.hostPlatform.system}.zsh;
-
-    # Define a user account. Don't forget to set a password with ‘passwd’.
-    users.users.h = {
-      isNormalUser = true;
-      extraGroups = ["networkmanager" "wheel" "audio" "video" "dialout" "docker"];
     };
 
     # List packages installed in system profile. To search, run:
