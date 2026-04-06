@@ -9,6 +9,7 @@
       inputs.sops-nix.nixosModules.sops
       inputs.neovim.nixosModules.neovim
       self.nixosModules.homelab
+      self.nixosModules.base
     ];
   };
 
@@ -103,15 +104,12 @@
     console.keyMap = "uk";
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
+    users.defaultUserShell = self.packages.${pkgs.stdenv.hostPlatform.system}.zsh;
     users.users.h = {
       isNormalUser = true;
       description = "h";
       extraGroups = ["networkmanager" "wheel" "optical"];
-      packages = with pkgs; [];
     };
-
-    # Allow unfree packages
-    nixpkgs.config.allowUnfree = true;
 
     # List packages installed in system profile. To search, run:
     # $ nix search wget
@@ -144,12 +142,6 @@
     # networking.firewall.allowedUDPPorts = [ ... ];
     # Or disable the firewall altogether.
     # networking.firewall.enable = false;
-
-    nix.gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
-    };
 
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions

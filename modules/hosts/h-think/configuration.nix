@@ -11,9 +11,11 @@
 
   flake.nixosModules.h-think = {pkgs, ...}: {
     imports = [
+      self.nixosModules.base
       self.nixosModules.battery
-      inputs.musnix.nixosModules.musnix
+      self.nixosModules.proaudio
       inputs.catppuccin.nixosModules.catppuccin
+      inputs.neovim.nixosModules.neovim
     ];
 
     # Use the systemd-boot EFI boot loader.
@@ -116,13 +118,6 @@
       enableSSHSupport = true;
     };
 
-    programs.neovim = {
-      enable = true;
-      defaultEditor = true;
-      viAlias = true;
-      vimAlias = true;
-    };
-
     # List services that you want to enable:
 
     # Enable the OpenSSH daemon.
@@ -147,8 +142,6 @@
 
     virtualisation.vmware.host.enable = true;
 
-    musnix.enable = true;
-
     # This value determines the NixOS release from which the default
     # settings for stateful data, like file locations and database versions
     # on your system were taken. It's perfectly fine and recommended to leave
@@ -156,14 +149,6 @@
     # Before changing this value read the documentation for this option
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     system.stateVersion = "23.05"; # Did you read the comment?
-    nix.settings.experimental-features = ["nix-command" "flakes"];
-
-    nix.gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
-    };
-
     catppuccin = {
       enable = true;
       flavor = "mocha";
