@@ -2,7 +2,7 @@
   flake.homeModules.cad = {pkgs, ...}: {
     home.packages = with pkgs; [
       diylc
-      cura
+      # cura
       freecad
       kicad
       librecad
