@@ -91,18 +91,17 @@
       HISTFILE="$HOME/.zsh_history"
       HISTSIZE=10000
       SAVEHIST=10000
-      setopt autocd notify
+      setopt autocd extendedglob nomatch notify
 
       # vi mode
       source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
-
-      source <(fzf --zsh)
 
       # starship
       eval "$(starship init zsh)"
 
       # carapace
-      # autoload -U compinit && compinit
+      autoload -Uz compinit
+      compinit -u
       # export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
       # zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
       # source <(carapace _carapace)
@@ -113,10 +112,12 @@
       #zoxide
       eval "$(zoxide init zsh --cmd cd)"
 
-      # mcfly
-      # eval "$(mcfly init zsh)"
-
       # Set up fzf key bindings and fuzzy completion
+      autoload -Uz add-zsh-hook
+      _fzf_init() {
+        source <(fzf --zsh)
+      }
+      add-zsh-hook -Uz precmd _fzf_init
     '';
   };
 }
