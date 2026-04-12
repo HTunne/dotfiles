@@ -202,11 +202,11 @@
         "wrappers": "wrappers"
       },
       "locked": {
-        "lastModified": 1775428193,
-        "narHash": "sha256-zjonZHPn6nYiWMsZe0XHZXL6cRwSAoYgUL6oRw1Shu8=",
+        "lastModified": 1775682854,
+        "narHash": "sha256-rJGH7liSC5ZF0bY3m+7auDqEco2Xe87TRjzADDmDvew=",
         "owner": "HTunne",
         "repo": "nvim-config",
-        "rev": "2f15d71ae35b2544b04851b9f29e04aab31fb667",
+        "rev": "11acacc426722bb1d0e251c678cbf1688351a775",
         "type": "github"
       },
       "original": {

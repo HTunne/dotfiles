@@ -1,4 +1,4 @@
-{
+{inputs, ...}: {
   flake.homeModules.wm-base = {
     config,
     pkgs,
@@ -16,7 +16,6 @@
       nerd-fonts.droid-sans-mono
       bemenu
       libnotify
-      imagemagick
       slurp
       grim
       swappy
@@ -126,6 +125,7 @@
     };
 
     programs.quickshell = {
+      package = inputs.qml-niri.packages.${pkgs.stdenv.hostPlatform.system}.quickshell;
       enable = true;
     };
 
@@ -150,7 +150,7 @@
     services.unclutter.enable = true;
 
     services.dunst = {
-      enable = false;
+      enable = true;
       settings = {
         global = {
           separator_color = "frame";
