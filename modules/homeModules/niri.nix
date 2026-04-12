@@ -289,7 +289,7 @@
     programs.waybar = {
       enable = true;
       systemd.enable = true;
-      systemd.target = "graphical-session.target";
+      systemd.targets = ["graphical-session.target"];
       settings = {
         mainBar = {
           layer = "top";
@@ -580,7 +580,7 @@
 
     services.swayidle = {
       enable = true;
-      systemdTarget = "graphical-session.target";
+      systemdTargets = ["graphical-session.target"];
       events = {
         "before-sleep" = "${pkgs.systemd}/bin/loginctl lock-session";
         "lock" = "pidof hyprlock || ${pkgs.hyprlock}/bin/hyprlock";
