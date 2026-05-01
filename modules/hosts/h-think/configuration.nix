@@ -11,7 +11,8 @@
 
   flake.nixosModules.h-think = {pkgs, ...}: {
     imports = [
-      inputs.catppuccin.nixosModules.catppuccin
+      self.nixosModules.style
+      self.nixosModules.niri-stack
       self.nixosModules.base
       self.nixosModules.user
       self.nixosModules.battery
@@ -47,21 +48,11 @@
 
     security.pam.services.hyprlock = {};
 
-    # services.displayManager.ly.enable = true;
+    services.displayManager.ly.enable = true;
 
-    services.greetd = {
+    programs.niri = {
       enable = true;
-      settings = rec {
-        initial_session = {
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --time-format '%I:%M %p | %a • %h | %F' --cmd niri-session";
-          user = "h";
-        };
-        default_session = initial_session;
-      };
     };
-    environment.etc."greetd/environments".text = ''
-      niri
-    '';
 
     services.udisks2.enable = true;
 
@@ -141,13 +132,6 @@
     # Before changing this value read the documentation for this option
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     system.stateVersion = "23.05"; # Did you read the comment?
-    catppuccin = {
-      enable = true;
-      flavor = "mocha";
-      tty = {
-        enable = true;
-      };
-    };
 
     programs.nix-ld.enable = true;
     programs.nix-ld.libraries = with pkgs; [

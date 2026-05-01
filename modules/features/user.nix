@@ -1,4 +1,4 @@
-{self, ...}: {
+{
   flake.homeModules.user = {
     lib,
     config,
@@ -17,7 +17,6 @@
   };
 
   flake.nixosModules.user = {
-    pkgs,
     lib,
     config,
     ...
@@ -29,7 +28,7 @@
       };
     };
     config = {
-      users.defaultUserShell = self.packages.${pkgs.stdenv.hostPlatform.system}.zsh;
+      # users.defaultUserShell = self.packages.${pkgs.stdenv.hostPlatform.system}.zsh;
       users.users.${config.preferences.user.name} = {
         isNormalUser = true;
         extraGroups = ["networkmanager" "wheel" "audio" "video" "dialout" "docker"];

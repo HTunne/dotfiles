@@ -32,6 +32,7 @@
       pkgs.imagemagick
       pkgs.jq
       pkgs.killall
+      pkgs.libqalculate
       pkgs.mcfly
       pkgs.ncdu
       pkgs.ripgrep

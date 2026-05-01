@@ -19,12 +19,9 @@
     ...
   }: {
     imports = [
-      inputs.catppuccin.homeModules.catppuccin
-      inputs.niri.homeModules.niri
       self.homeModules.user
-      self.homeModules.wm-base
-      self.homeModules.niri
       self.homeModules.cad
+      self.homeModules.niri-stack
     ];
     # This value determines the Home Manager release that your configuration is
     # compatible with. This helps avoid breakage when a new Home Manager release
@@ -33,7 +30,7 @@
     # You should not change this value, even if you update Home Manager. If you do
     # want to update the value, then make sure to first check the Home Manager
     # release notes.
-    home.stateVersion = "23.05"; # Please read the comment before changing.
+    home.stateVersion = "26.05"; # Please read the comment before changing.
 
     # The home.packages option allows you to install Nix packages into your
     # environment.
@@ -74,38 +71,14 @@
       BROWSER = "firefox";
     };
 
-    gtk = {
-      enable = true;
-      font.name = "DejaVuSansM Nerd Font 14";
-    };
-
-    qt = {
-      enable = true;
-      style.name = "kvantum";
-      platformTheme.name = "kvantum";
-    };
+    programs.home-manager.enable = true;
 
     programs.alacritty = {
       enable = true;
       settings = {
         font = {
-          normal = "DejaVuSansM Nerd Font Mono";
+          normal.family = "DejaVuSansM Nerd Font Mono";
           size = 10;
-        };
-      };
-      # settings.shell.program = "${pkgs.nushell}/bin/nu";
-    };
-
-    programs.foot = {
-      enable = true;
-      server.enable = true;
-      settings = {
-        main = {
-          font = "DejaVuSansM Nerd Font Mono:size=10";
-        };
-
-        mouse = {
-          hide-when-typing = "yes";
         };
       };
     };
@@ -206,12 +179,12 @@
       };
     };
 
-    programs.home-manager.enable = true;
-
     programs.mpv.enable = true;
 
-
-    programs.password-store.enable = true;
+    programs.password-store = {
+      enable = true;
+      settings = {PASSWORD_STORE_DIR = "${config.xdg.dataHome}/password-store";};
+    };
 
     programs.ssh = {
       enable = true;
@@ -226,6 +199,7 @@
 
     programs.zathura.enable = true;
 
+    xdg.userDirs.setSessionVariables = true;
     xdg.userDirs = {
       enable = true;
       createDirectories = true;
@@ -239,14 +213,9 @@
       videos = "$HOME/vids";
     };
 
-    catppuccin = {
+    programs.direnv = {
       enable = true;
-      flavor = "mocha";
-      cursors.enable = true;
-      cursors.accent = "teal";
-      nvim.enable = false;
-      kvantum.enable = false;
-      hyprlock.useDefaultConfig = false;
+      nix-direnv.enable = true;
     };
   };
 }
