@@ -135,7 +135,7 @@
 
             "Mod+U".action.spawn = [(lib.getExe pkgs.walker) "-m" "calc"];
             "Mod+Shift+U".action = move-workspace-down;
-            "Mod+I".action.spawn-sh = "$TERMINAL -e btm";
+            "Mod+I".action.spawn = [(lib.getExe pkgs.noctalia-shell) "ipc" "call" "systemMonitor" "toggle"];
             "Mod+Shift+I".action = move-workspace-up;
             "Mod+O" = {
               action = toggle-overview;
@@ -161,6 +161,7 @@
             "Mod+Comma".action = consume-or-expel-window-left;
             "Mod+Period".action = consume-or-expel-window-right;
 
+            "Mod+F1".action.spawn-sh = "pkill quickshell && noctalia-shell";
             "Mod+F2".action.spawn = "networkmanager_dmenu";
             "Mod+F3".action.spawn = [(lib.getExe pkgs.walker) "-m" "clipboard"];
 
