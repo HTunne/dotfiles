@@ -18,6 +18,7 @@
       enable = true;
       settings = {
         bar = {
+          settingsVersion = 59;
           barType = "floating";
           position = "top";
           density = "compact";
