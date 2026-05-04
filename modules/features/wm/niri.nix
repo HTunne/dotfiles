@@ -127,8 +127,8 @@
               action = close-window;
               repeat = false;
             };
-            "Mod+W".action.spawn = lib.getExe pkgs.firefox;
-            "Mod+Shift+W".action.spawn = [(lib.getExe pkgs.firefox) "--private-window"];
+            "Mod+W".action.spawn-sh = "$BROWSER"; # lib.getExe pkgs.firefox;
+            "Mod+Shift+W".action.spawn-sh = "$BROWSER --private-window";
             "Mod+E".action.spawn = [(lib.getExe pkgs.noctalia-shell) "ipc" "call" "sessionMenu" "toggle"];
 
             "Mod+T".action = toggle-column-tabbed-display;
