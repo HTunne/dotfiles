@@ -163,6 +163,50 @@
         idle = {
           enabled = true;
         };
+        sessionMenu = {
+          enableCountdown = false;
+          largeButtonsStyle = true;
+          powerOptions = [
+            {
+              action = "lock";
+              keybind = "L";
+              enabled = true;
+            }
+            {
+              action = "suspend";
+              enabled = false;
+            }
+            {
+              action = "hibernate";
+              enabled = false;
+            }
+            {
+              action = "reboot";
+              keybind = "R";
+              enabled = true;
+            }
+            {
+              action = "logout";
+              keybind = "E";
+              enabled = true;
+            }
+            {
+              action = "shutdown";
+              keybind = "S";
+              enabled = true;
+            }
+            {
+              action = "rebootToUefi";
+              enabled = false;
+            }
+            {
+              action = "userspaceReboot";
+              enabled = false;
+            }
+          ];
+          showHeader = true;
+          showKeybinds = true;
+        };
       };
       colors = {
         "mError" = "#f38ba8";
