@@ -16,13 +16,11 @@
     ...
   }: {
     imports = [
-      inputs.catppuccin.homeModules.catppuccin
-      inputs.niri.homeModules.niri
       self.homeModules.user
-      self.homeModules.wm-base
-      self.homeModules.cad
-      self.homeModules.niri
+      self.homeModules.niri-stack
     ];
+
+    nixpkgs.config.allowUnfree = true;
 
     # This value determines the Home Manager release that your configuration is
     # compatible with. This helps avoid breakage when a new Home Manager release
@@ -31,33 +29,51 @@
     # You should not change this value, even if you update Home Manager. If you do
     # want to update the value, then make sure to first check the Home Manager
     # release notes.
-    home.stateVersion = "23.05"; # Please read the comment before changing.
+    home.stateVersion = "26.05"; # Please read the comment before changing.
 
     # The home.packages option allows you to install Nix packages into your
     # environment.
-    home.packages = with pkgs; [
-      self.packages.${pkgs.stdenv.hostPlatform.system}.zsh
+    home.packages = [
+      # Devtools
+      pkgs.android-studio
+      pkgs.android-tools
+      # pkgs.python3
+      pkgs.bear
+      # pkgs.cargo
+      pkgs.commitizen
+      pkgs.unzip
+      pkgs.zip
 
-      imv
-      timewarrior
-      wayout
-      xlsclients
+      # Command line
+      pkgs.ncdu
+      pkgs.imv
+      pkgs.timewarrior
+      pkgs.wayout
+      pkgs.xlsclients
 
       # GUI
-      google-chrome
-      backintime
-      blueman
-      gimp
-      guvcview
-      inkscape
-      libreoffice
-      pcmanfm
-      pinta
-      libsForQt5.qtstyleplugin-kvantum
+      pkgs.google-chrome
+      pkgs.backintime
+      pkgs.blueman
+      # cura
+      pkgs.diylc
+      pkgs.freecad-wayland
+      pkgs.gimp
+      pkgs.guvcview
+      pkgs.inkscape
+      pkgs.kicad
+      pkgs.librecad
+      pkgs.libreoffice
+      pkgs.openscad
+      pkgs.pcmanfm
+      pkgs.pinta
+      pkgs.prusa-slicer
+      pkgs.libsForQt5.qtstyleplugin-kvantum
+      pkgs.wdisplays
 
       #audio
-      audacity
-      pwvucontrol
+      pkgs.audacity
+      pkgs.pwvucontrol
     ];
 
     nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
@@ -69,34 +85,8 @@
     ];
 
     home.sessionVariables = {
-      TERMINAL = "foot";
-      VISUAL = "nvim";
+      VISUAL = "vim";
       BROWSER = "firefox";
-    };
-
-    gtk = {
-      enable = true;
-      font.name = "DejaVuSansM Nerd Font 14";
-    };
-    qt = {
-      enable = true;
-      style.name = "kvantum";
-      platformTheme.name = "kvantum";
-    };
-
-    programs.foot = {
-      enable = true;
-      server.enable = true;
-      settings = {
-        main = {
-          # shell = "${pkgs.nushell}/bin/nu";
-          font = "DejaVuSansM Nerd Font Mono:size=10";
-        };
-
-        mouse = {
-          hide-when-typing = "yes";
-        };
-      };
     };
 
     programs.browserpass = {
@@ -104,24 +94,20 @@
       browsers = ["firefox"];
     };
 
-    programs.git = {
-      enable = true;
-      lfs.enable = true;
-      settings = {
-        user.name = "Harry Tunnicliffe";
-        user.email = "harry.tunnicliffe@platformkinetics.com";
-      };
-    };
+    # programs.git = {
+    #   enable = true;
+    #   lfs.enable = true;
+    #   settings = {
+    #     user.name = "Harry Tunnicliffe";
+    #     user.email = "harry.tunnicliffe@platformkinetics.com";
+    #   };
+    # };
 
     programs.home-manager.enable = true;
 
     programs.mpv.enable = true;
 
     programs.password-store.enable = true;
-
-    programs.ssh = {
-      enable = true;
-    };
 
     programs.taskwarrior = {
       package = pkgs.taskwarrior3;
@@ -133,48 +119,25 @@
 
     programs.zathura.enable = true;
 
-    catppuccin = {
-      enable = true;
-      flavor = "mocha";
-      cursors.enable = true;
-      cursors.accent = "teal";
-      nvim.enable = false;
-      kvantum.enable = false;
-    };
-
-    nixGL = {
+    targets.genericLinux.nixGL = {
       packages = inputs.nixGL.packages; # you must set this or everything will be a noop
       defaultWrapper = "mesa"; # choose from nixGL options depending on GPU
     };
 
-    wayland.windowManager.hyprland = {
-      package = config.lib.nixGL.wrap pkgs.hyprland;
-      enable = true;
-      settings = {
-        "$mod" = "SUPER";
-        bind = [
-          "$mod, B, exec, thunderbird"
-          "$mod SHIFT, B, exec, slack"
-        ];
-      };
+    programs.noctalia-shell = {
+      package = config.lib.nixGL.wrap pkgs.noctalia-shell;
     };
 
-    programs.niri = {
-      package = config.lib.nixGL.wrap pkgs.niri-unstable;
-      settings = {
-        binds = {
-          "Mod+B".action.spawn = "thunderbird";
-          "Mod+Shift+B".action.spawn = "slack";
-        };
-      };
+    wm.niri.chat-app = {
+      pkg = "slack";
+      app_id = "slack";
     };
 
     programs.bash = {
       enable = true;
       shellAliases = {
-        sxiv = "swayimg";
         jn = "pipenv run jupyter lab";
-        idf = "source $HOME/src/espressif/esp-idf/export.sh";
+        idf = "source /home/h/.espressif/tools/activate_idf_v6.0.sh";
       };
     };
   };
