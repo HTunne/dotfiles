@@ -68,7 +68,7 @@
         settings = {
           spawn-at-startup = [
             {
-              command = [(lib.getExe pkgs.noctalia-shell)];
+              command = [(lib.getExe pkgs.noctalia)];
             }
             {
               command = ["systemctl" "restart" "--user" "kanshi" "foot" "walker"];
@@ -129,13 +129,13 @@
             };
             "Mod+W".action.spawn-sh = "$BROWSER"; # lib.getExe pkgs.firefox;
             "Mod+Shift+W".action.spawn-sh = "$BROWSER --private-window";
-            "Mod+E".action.spawn = [(lib.getExe pkgs.noctalia-shell) "ipc" "call" "sessionMenu" "toggle"];
+            "Mod+E".action.spawn = [(lib.getExe pkgs.noctalia) "msg" "panel-toggle" "session"];
 
             "Mod+T".action = toggle-column-tabbed-display;
 
             "Mod+U".action.spawn = [(lib.getExe pkgs.walker) "-m" "calc"];
             "Mod+Shift+U".action = move-workspace-down;
-            "Mod+I".action.spawn = [(lib.getExe pkgs.noctalia-shell) "ipc" "call" "systemMonitor" "toggle"];
+            "Mod+I".action.spawn = [(lib.getExe pkgs.noctalia) "msg" "panel-toggle" "control-center" "system"];
             "Mod+Shift+I".action = move-workspace-up;
             "Mod+O" = {
               action = toggle-overview;
