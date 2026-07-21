@@ -14,217 +14,180 @@
     ];
 
     # configure options
-    programs.noctalia-shell = {
+    programs.noctalia = {
       enable = true;
       settings = {
         bar = {
-          settingsVersion = 59;
-          barType = "floating";
-          position = "top";
-          density = "compact";
-          showCapsule = false;
-          backgroundOpacity = 1;
-          outerCorners = false;
-          hideOnOverview = true;
-          widgets = {
-            "left" = [
-              {
-                "characterCount" = 2;
-                "colorizeIcons" = false;
-                "emptyColor" = "none";
-                "enableScrollWheel" = true;
-                "focusedColor" = "primary";
-                "followFocusedScreen" = false;
-                "fontWeight" = "bold";
-                "groupedBorderOpacity" = 1;
-                "hideUnoccupied" = true;
-                "iconScale" = 0.8;
-                "id" = "Workspace";
-                "labelMode" = "none";
-                "occupiedColor" = "none";
-                "pillSize" = 0.6;
-                "showApplications" = false;
-                "showApplicationsHover" = false;
-                "showBadge" = true;
-                "showLabelsOnlyWhenOccupied" = false;
-                "unfocusedIconsOpacity" = 1;
-              }
-              {
-                "compactMode" = false;
-                "hideMode" = "hidden";
-                "hideWhenIdle" = false;
-                "id" = "MediaMini";
-                "maxWidth" = 1000;
-                "panelShowAlbumArt" = true;
-                "scrollingMode" = "hover";
-                "showAlbumArt" = false;
-                "showArtistFirst" = false;
-                "showProgressRing" = true;
-                "showVisualizer" = false;
-                "textColor" = "none";
-                "useFixedWidth" = false;
-                "visualizerType" = "mirrored";
-              }
+          default = {
+            concave_edge_corners = false;
+            end = [
+              "volume"
+              "brightness"
+              "network"
+              "bluetooth"
+              "battery"
+              "notifications"
+              "control-center"
             ];
-            "center" = [
-              {
-                "clockColor" = "none";
-                "customFont" = "";
-                "formatHorizontal" = "HH:mm ddd MMM d";
-                "formatVertical" = "HH mm - dd MM";
-                "id" = "Clock";
-                "tooltipFormat" = "HH=mm ddd, MMM dd";
-                "useCustomFont" = false;
-              }
+            margin_ends = 0;
+            start = [
+              "workspaces"
+              "media"
             ];
-            "right" = [
+          };
+        };
+        location = {address = "Leeds";};
+        lockscreen.tint_intensity = 1.0;
+        lockscreen_widgets = {
+          enabled = true;
+          grid = {
+            cell_size = 16;
+            major_interval = 4;
+            visible = true;
+          };
+          schema_version = 2;
+          widget = {
+            "lockscreen-login-box@HDMI-A-2" = {
+              box_height = 70;
+              box_width = 400;
+              cx = 1280;
+              cy = 1321;
+              output = "HDMI-A-2";
+              rotation = 0;
+              settings = {
+                background_color = "surface_variant";
+                background_opacity = 0.88;
+                background_radius = 12;
+                center_password_text = false;
+                input_opacity = 1;
+                input_radius = 6;
+                show_caps_lock = true;
+                show_keyboard_layout = true;
+                show_login_button = true;
+                show_password_hint = true;
+              };
+              type = "login_box";
+            };
+            "lockscreen-login-box@eDP-1" = {
+              box_height = 70;
+              box_width = 400;
+              cx = 960;
+              cy = 961;
+              output = "eDP-1";
+              rotation = 0;
+              settings = {
+                background_color = "surface_variant";
+                background_opacity = 0;
+                background_radius = 12;
+                center_password_text = false;
+                input_opacity = 1;
+                input_radius = 6;
+                show_caps_lock = true;
+                show_keyboard_layout = true;
+                show_login_button = true;
+                show_password_hint = true;
+              };
+              type = "login_box";
+            };
+            lockscreen-widget-0000000000000001 = {
+              box_height = 0;
+              box_width = 0;
+              cx = 1743;
+              cy = 93;
+              output = "eDP-1";
+              rotation = 0;
+              settings = {
+                background_opacity = 0;
+                clock_style = "digital";
+                color = "on_surface";
+                shadow = true;
+              };
+              type = "clock";
+            };
+            lockscreen-widget-0000000000000002 = {
+              box_height = 0;
+              box_width = 0;
+              cx = 176;
+              cy = 90;
+              output = "eDP-1";
+              rotation = 0;
+              type = "weather";
+            };
+            lockscreen-widget-0000000000000003 = {
+              box_height = 400;
+              box_width = 1920;
+              cx = 958;
+              cy = 542;
+              output = "eDP-1";
+              rotation = 0;
+              settings = {
+                bands = 32;
+                color_1 = "primary";
+                show_when_idle = true;
+              };
+              type = "audio_visualizer";
+            };
+          };
+          widget_order = [
+            "lockscreen-login-box@HDMI-A-2"
+            "lockscreen-login-box@eDP-1"
+            "lockscreen-widget-0000000000000001"
+            "lockscreen-widget-0000000000000002"
+            "lockscreen-widget-0000000000000003"
+          ];
+        };
+        shell = {
+          font_family = "DroidSansM Nerd Font";
+          niri_overview_type_to_launch_enabled = true;
+          session = {
+            actions = [
               {
-                "displayMode" = "alwaysShow";
-                "iconColor" = "none";
-                "id" = "Volume";
-                "middleClickCommand" = "pwvucontrol || pavucontrol";
-                "textColor" = "none";
+                action = "lock";
+                countdown_seconds = 0;
+                enabled = true;
+                shortcut = "l";
+                variant = "default";
               }
               {
-                "applyToAllMonitors" = false;
-                "displayMode" = "alwaysShow";
-                "iconColor" = "none";
-                "id" = "Brightness";
-                "textColor" = "none";
+                action = "logout";
+                countdown_seconds = 0;
+                enabled = true;
+                shortcut = "e";
+                variant = "default";
               }
               {
-                "displayMode" = "alwaysShow";
-                "iconColor" = "none";
-                "id" = "Network";
-                "textColor" = "none";
+                action = "lock_and_suspend";
+                countdown_seconds = 0;
+                enabled = true;
+                shortcut = "s";
+                variant = "default";
               }
               {
-                "displayMode" = "onhover";
-                "iconColor" = "none";
-                "id" = "Bluetooth";
-                "textColor" = "none";
+                action = "reboot";
+                countdown_seconds = 0;
+                enabled = true;
+                shortcut = "r";
+                variant = "default";
               }
               {
-                "deviceNativePath" = "__default__";
-                "displayMode" = "icon-always";
-                "hideIfIdle" = false;
-                "hideIfNotDetected" = true;
-                "id" = "Battery";
-                "showNoctaliaPerformance" = false;
-                "showPowerProfiles" = false;
-              }
-              {
-                "hideWhenZero" = true;
-                "hideWhenZeroUnread" = false;
-                "iconColor" = "none";
-                "id" = "NotificationHistory";
-                "showUnreadBadge" = true;
-                "unreadBadgeColor" = "primary";
-              }
-              {
-                "blacklist" = [];
-                "chevronColor" = "none";
-                "colorizeIcons" = false;
-                "drawerEnabled" = true;
-                "hidePassive" = false;
-                "id" = "Tray";
-                "pinned" = [];
-              }
-              {
-                "id" = "ControlCenter";
-                "colorizeDistroLogo" = false;
-                "colorizeSystemIcon" = "none";
-                "colorizeSystemText" = "none";
-                "customIconPath" = "";
-                "enableColorization" = true;
-                "icon" = "noctalia";
-                "useDistroLogo" = true;
+                action = "shutdown";
+                countdown_seconds = 0;
+                enabled = true;
+                shortcut = "s";
+                variant = "destructive";
               }
             ];
           };
         };
-        ui = {
-          fontDefault = "DejaVuSansM Nerd Font";
-          fontFixed = "DejaVuSansM Nerd Font Mono";
-        };
-        location = {
-          name = "Leeds";
-          autoLocate = false;
-        };
+        theme = {builtin = "Catppuccin";};
         wallpaper = {
           enabled = false;
         };
-        colourSchemes = {
-          predefinedScheme = "Catppuccin";
+        widget = {
+          clock = {format = "{:%Y-%m-%d %H:%M}";};
+          control-center = {glyph = "circle-dashed";};
+          media = {hide_when_no_media = true;};
         };
-        nightLight = {
-          enabled = true;
-        };
-        idle = {
-          enabled = true;
-        };
-        sessionMenu = {
-          enableCountdown = false;
-          largeButtonsStyle = true;
-          powerOptions = [
-            {
-              action = "lock";
-              keybind = "L";
-              enabled = true;
-            }
-            {
-              action = "suspend";
-              enabled = false;
-            }
-            {
-              action = "hibernate";
-              enabled = false;
-            }
-            {
-              action = "reboot";
-              keybind = "R";
-              enabled = true;
-            }
-            {
-              action = "logout";
-              keybind = "E";
-              enabled = true;
-            }
-            {
-              action = "shutdown";
-              keybind = "S";
-              enabled = true;
-            }
-            {
-              action = "rebootToUefi";
-              enabled = false;
-            }
-            {
-              action = "userspaceReboot";
-              enabled = false;
-            }
-          ];
-          showHeader = true;
-          showKeybinds = true;
-        };
-      };
-      colors = {
-        "mError" = "#f38ba8";
-        "mHover" = "#94e2d5";
-        "mOnError" = "#11111b";
-        "mOnHover" = "#11111b";
-        "mOnPrimary" = "#11111b";
-        "mOnSecondary" = "#11111b";
-        "mOnSurface" = "#cdd6f4";
-        "mOnSurfaceVariant" = "#a3b4eb";
-        "mOnTertiary" = "#11111b";
-        "mOutline" = "#4c4f69";
-        "mPrimary" = "#a6e3a1";
-        "mSecondary" = "#cba6f7";
-        "mShadow" = "#11111b";
-        "mSurface" = "#1e1e2e";
-        "mSurfaceVariant" = "#313244";
-        "mTertiary" = "#94e2d5";
       };
     };
   };

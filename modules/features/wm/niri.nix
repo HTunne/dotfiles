@@ -161,32 +161,32 @@
             "Mod+Comma".action = consume-or-expel-window-left;
             "Mod+Period".action = consume-or-expel-window-right;
 
-            "Mod+F1".action.spawn-sh = "pkill quickshell && noctalia-shell";
+            "Mod+F1".action.spawn-sh = "pkill quickshell && noctalia";
             "Mod+F2".action.spawn = "networkmanager_dmenu";
             "Mod+F3".action.spawn = [(lib.getExe pkgs.walker) "-m" "clipboard"];
 
             "XF86AudioRaiseVolume" = {
-              action.spawn = [(lib.getExe pkgs.noctalia-shell) "ipc" "call" "volume" "increase"];
+              action.spawn = [(lib.getExe pkgs.noctalia) "msg" "volume-up"];
               allow-when-locked = true;
             };
             "XF86AudioLowerVolume" = {
-              action.spawn = [(lib.getExe pkgs.noctalia-shell) "ipc" "call" "volume" "decrease"];
+              action.spawn = [(lib.getExe pkgs.noctalia) "msg" "volume-down"];
               allow-when-locked = true;
             };
             "XF86AudioMute" = {
-              action.spawn = [(lib.getExe pkgs.noctalia-shell) "ipc" "call" "volume" "muteOutput"];
+              action.spawn = [(lib.getExe pkgs.noctalia) "msg" "volume-mute"];
               allow-when-locked = true;
             };
             "XF86AudioMicMute" = {
-              action.spawn = [(lib.getExe pkgs.noctalia-shell) "ipc" "call" "volume" "muteInput"];
+              action.spawn = [(lib.getExe pkgs.noctalia) "msg" "mic-mute"];
               allow-when-locked = true;
             };
             "XF86MonBrightnessUp" = {
-              action.spawn = [(lib.getExe pkgs.noctalia-shell) "ipc" "call" "brightness" "increase"];
+              action.spawn = [(lib.getExe pkgs.noctalia) "msg" "brightness-up"];
               allow-when-locked = true;
             };
             "XF86MonBrightnessDown" = {
-              action.spawn = [(lib.getExe pkgs.noctalia-shell) "ipc" "call" "brightness" "decrease"];
+              action.spawn = [(lib.getExe pkgs.noctalia) "msg" "brightness-down"];
               allow-when-locked = true;
             };
             # TODO: add media controls
