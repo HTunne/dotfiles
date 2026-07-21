@@ -12,7 +12,6 @@
       pkgs.audacity
       pkgs.AMB-plugins
       pkgs.bespokesynth
-      pkgs.calf
       pkgs.cardinal
       pkgs.caps
       pkgs.bchoppr
@@ -21,11 +20,14 @@
       pkgs.dragonfly-reverb
       # pkgs.helm
       pkgs.hydrogen
+      pkgs.lsp-plugins
+      pkgs.neural-amp-modeler-lv2
       pkgs.pwvucontrol
       pkgs.tap-plugins
       pkgs.vmpk
       pkgs.wolf-shaper
       pkgs.x42-avldrums
+      pkgs.x42-plugins
       pkgs.yoshimi
       pkgs.zam-plugins
     ];
