@@ -1,7 +1,4 @@
-{
-  inputs,
-  ...
-}: {
+{inputs, ...}: {
   flake.homeModules.shell = {
     pkgs,
     lib,
@@ -14,7 +11,9 @@
     home.packages = [
       inputs.neovim.packages.${pkgs.stdenv.hostPlatform.system}.neovim-dynamic
       pkgs.bear
-      pkgs.commitizen
+      (pkgs.writeShellScriptBin "cz" ''
+        exec ${pkgs.commitizen-go}/bin/commitizen-go "$@"
+      '')
       pkgs.curl
       pkgs.dust
       pkgs.dysk
