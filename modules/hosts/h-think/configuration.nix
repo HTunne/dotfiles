@@ -46,13 +46,7 @@
 
     security.polkit.enable = true;
 
-    security.pam.services.hyprlock = {};
-
     services.displayManager.ly.enable = true;
-
-    programs.niri = {
-      enable = true;
-    };
 
     services.udisks2.enable = true;
 
@@ -84,8 +78,6 @@
       tuigreet
     ];
 
-    # services.xserver.windowManager.qtile.enable = true;
-    # programs.hyprland.enable = true;
     environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
     programs.dconf.enable = true;
