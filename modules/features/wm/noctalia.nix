@@ -23,13 +23,15 @@
             end = [
               "volume"
               "brightness"
+              "battery"
               "network"
               "bluetooth"
-              "battery"
               "notifications"
               "control-center"
             ];
-            margin_ends = 0;
+            margin_ends = 5;
+            margin_edge = 5;
+            radius = 5;
             start = [
               "workspaces"
               "media"
@@ -137,7 +139,7 @@
           ];
         };
         shell = {
-          font_family = "DroidSansM Nerd Font";
+          font_family = "DejaVuSansM Nerd Font";
           niri_overview_type_to_launch_enabled = true;
           session = {
             actions = [
@@ -159,7 +161,7 @@
                 action = "lock_and_suspend";
                 countdown_seconds = 0;
                 enabled = true;
-                shortcut = "s";
+                shortcut = "u";
                 variant = "default";
               }
               {
